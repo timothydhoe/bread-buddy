@@ -50,6 +50,11 @@ def recipe_scaler(multiplier, ingredients):
     return ingredients
 
 def desired_dough_weight(desired_weight, formula):
+    """
+    Takes desired weight and the recipe's formula.
+
+    Returns a dict with the ingredient's values.
+    """
     sum_percentages = sum(v for k, v in formula.items() if k != "flour_weight")
 
     flour_weight = round(desired_weight / (1 + sum_percentages), 1)
@@ -61,4 +66,12 @@ def desired_dough_weight(desired_weight, formula):
     return results
     
 
-# TODO: def desired_water_temperature()
+def desired_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, Celsius=True)
+    """
+    takes (Desired Dough Temp), flour, levain, friction and ambient temp in Celcius.
+    The friction_fact is set to 0 by default; this is mixing by hand.
+    TODO: Add friction factor info pp.138-139
+
+    Returns temperature of the water.
+    """
+    # water_temp = ddt * 4 - (flour_temp + levain_temp + ambient_temp + friction_fact)
