@@ -12,7 +12,7 @@ A calculator app that helps bakers
 
 **Desired dough weight** → ingredients - "I want 800g of dough" → breaks down flour, water, salt, yeast
 
-**Recipe scaler** - scale any recipe up/down by portions or total weight
+~~**Recipe scaler** - scale any recipe up/down by portions or total weight~~
 
 Really handy:
 
