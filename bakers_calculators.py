@@ -41,9 +41,24 @@ def calculate_hydration(flour_weight, water_weight):
     return consistency
 
 def recipe_scaler(multiplier, ingredients):
+    """
+    Takes a multiplication value and a kv dictionary.
+    Returns dict with updated values.
+    """
     for ingredient, value in ingredients.items():
         ingredients[ingredient] = value * multiplier
     return ingredients
+
+def desired_dough_weight(desired_weight, formula):
+    sum_percentages = sum(v for k, v in formula.items() if k != "flour_weight")
+
+    flour_weight = round(desired_weight / (1 + sum_percentages), 1)
+
+    results = {"flour_weight": flour_weight}
+    for ingredient, percentage in formula.items():
+        results[ingredient] = round(flour_weight * percentage, 1)
+
+    return results
     
 
 # TODO: def desired_water_temperature()
