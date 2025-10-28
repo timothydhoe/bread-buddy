@@ -10,7 +10,7 @@ A calculator app that helps bakers
 
 ~~**Hydration calculator** - water/flour ratio, shows if dough will be sticky/stiff~~
 
-**Desired dough weight** → ingredients - "I want 800g of dough" → breaks down flour, water, salt, yeast
+~~**Desired dough weight** → ingredients - "I want 800g of dough" → breaks down flour, water, salt, yeast~~
 
 ~~**Recipe scaler** - scale any recipe up/down by portions or total weight~~
 
