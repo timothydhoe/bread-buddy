@@ -52,12 +52,18 @@ def main():
     scaled_result = bc.recipe_scaler(scale, ratio_results)
     for ingredient, value in scaled_result.items():
         print(f"{ingredient}: {value}")
+    print()
 
+    # Calling and printing desired_dough_weight()
+    dough_weight = 1_900
+    desired_weight = bc.desired_dough_weight(dough_weight, formula)
+    print(f"\nDesidered Total Dough Weight: {dough_weight}")
+    for ingredient, value in desired_weight.items():
+        print(f"• {ingredient}: {value} grams")
 
 # Run the programme.
 if __name__ == "__main__":
     main()
-
 
 
 
