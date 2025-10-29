@@ -18,9 +18,9 @@ Really handy:
 
 ~~**Water temperature calculator** - factors in flour temp, room temp, friction factor to hit target dough temp~~
 
-**Autolyse timer** - just a simple reminder, but bakers forget
+~~**Autolyse timer** - just a simple reminder, but bakers forget~~
 
-**Bulk fermentation time adjuster** - warmer room = shorter time (simple formula)
+~~**Bulk fermentation time adjuster** - warmer room = shorter time~~
 
 Nice-to-haves:
 
@@ -30,7 +30,7 @@ Nice-to-haves:
 
 **Oven spring estimator** - how much will dough rise in oven
 
-**Unit conversions** - cups to grams (annoying but necessary)
+**Unit conversions** - cups to grams? Necessary?
 
 
 
