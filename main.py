@@ -9,7 +9,7 @@ import bakers_calculators as bc
 
 
 def main():
-    """
+    """s
     Setting up variables.
     """
     flour_weight = 0
@@ -60,6 +60,13 @@ def main():
     print(f"\nDesidered Total Dough Weight: {dough_weight}")
     for ingredient, value in desired_weight.items():
         print(f"• {ingredient}: {value} grams")
+
+    # Calling and printing desired_water_temperature()
+    my_water = bc.mixing_water_temperature()
+    print(f"My water: {my_water} in Celsius")
+
+    my_water = bc.mixing_water_temperature(celsius=False)
+    print(f"My water: {my_water} in Fahrenheit")
 
 # Run the programme.
 if __name__ == "__main__":
