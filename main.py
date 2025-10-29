@@ -101,7 +101,8 @@ def main():
     print("Bulk Fermentation Calculator")
     print("----------------------------")
     bulk_time = bc.bulk_fermentation_adjuster(base_time_hours=4)
-    print(f"\n{bulk_time}")
+    for value, key in bulk_time.items():
+        print(f"{value}: {key}")
     print("---\n")
 
 # Run the programme.
