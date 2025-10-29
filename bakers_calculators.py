@@ -72,7 +72,7 @@ def desired_dough_weight(desired_weight, formula):
     return results
     
 
-def desired_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, celsius=True):
+def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, celsius=True):
     """
     takes (Desired Dough Temp), flour, levain, friction and ambient temp in Celcius.
 
@@ -88,4 +88,4 @@ def desired_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_tem
         ambient_temp = utils.celsius_to_fahrenheit(ambient_temp)
         # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
 
-    return (ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact)
+    return round((ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
