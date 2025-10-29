@@ -107,6 +107,7 @@ def autolyse_timer(duration_minutes=30):
         "duration": duration_minutes
     }
 
+
 def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=22):
     """
     base_time_hours: fermentation time at reference temp (default 21°C)
@@ -127,3 +128,16 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=
         "reference_temp": reference_temp,
         "ambient_temp": ambient_temp
     }
+
+def feeding_calculator (target_amount=0, feeding_ratio=(1,1,1)):
+    """
+    feeding_ratio: flour:water:inoculation(ripe sourdouh carryover)
+
+    WHAT DOES A BAKER ACTUALLY NEED TO KNOW?
+        --> I have 50g starter, I want to feed it 1:1:.2, how much flour and water do I add?
+        --> I need 200g of active starter for tomorrow's bake, How much do I feed?
+    """
+    flour, water, inoculation = feeding_ratio
+    pass
+
+    
