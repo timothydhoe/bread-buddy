@@ -1,10 +1,12 @@
-# Bread Mate
+# Bread Buddy
 
 *Bake by Numbers*
 
 A calculator app that helps bakers
 
 ## TODOs
+
+essentials and must-haves:
 
 ~~**Baker's percentage calculator** - the bread baker's holy grail. Input flour weight, get all other ingredients as percentages or vice versa~~
 
@@ -14,27 +16,26 @@ A calculator app that helps bakers
 
 ~~**Recipe scaler** - scale any recipe up/down by portions or total weight~~
 
-Really handy:
-
 ~~**Water temperature calculator** - factors in flour temp, room temp, friction factor to hit target dough temp~~
 
 ~~**Autolyse timer** - just a simple reminder, but bakers forget~~
 
 ~~**Bulk fermentation time adjuster** - warmer room = shorter time~~
 
-Nice-to-haves:
+~~**Sourdough feeding calculator** - starter ratios~~
 
-**Sourdough feeding calculator** - starter ratios
+Nice-to-haves:
 
 **Pre-fermented Flour percentage** -- pp.130-131
 
 **Levain percentage** -- pp.130-131
 
-**Flour substitution ratios** - swapping whole wheat for AP flour (affects hydration)
+**Flour substitution ratios** - swapping T60 wheat for T150 wheat? Or swapping Rye for Spelt? (affects hydration)
 
-**Oven spring estimator** - how much will dough rise in oven
+**Oven spring estimator** - how much will dough rise in oven? Can this be calculated?
 
-**Unit conversions** - cups to grams? Necessary?
+**Unit conversions** - cups to grams? Necessary? --> maybe not, use grams only? 🤔
+
 
 ## Refactoring:
 
@@ -63,6 +64,7 @@ At the end:
 **DRY principle** --> repeating any logic that could be a helper function?
 
 **Error handling** --> check for crashes, make them failures.
+                   --> adding exit codes?
 
 **Unit tests** --> test calculations (pytest!)
 
@@ -115,7 +117,6 @@ I will do my utmost best to keep this list both updated and alphabetical. Yet, I
 
 **Inoculation**
 : *Ripe Sourdough Carryover*
-
 
 
 ## Resources
