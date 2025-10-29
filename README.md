@@ -26,6 +26,10 @@ Nice-to-haves:
 
 **Sourdough feeding calculator** - starter ratios
 
+**Pre-fermented Flour percentage** -- pp.130-131
+
+**Levain percentage** -- pp.130-131
+
 **Flour substitution ratios** - swapping whole wheat for AP flour (affects hydration)
 
 **Oven spring estimator** - how much will dough rise in oven
@@ -80,11 +84,29 @@ At the end:
 **Dough Decoder**
 **Baker's Metric**
 
+## Baker's percentage *aka baker's math*
 
+The baker's percentage is a bit different from how mathematicians would look at percentages.
 
-## Ratios
+The key part to understand about using baker's percentages is that all the flour used in a formula will always add up to 100%.
+The flour is the main ingredient to which all other ingredients are compared, and the other ingredients are expressed as a percentage of the total flour weight.
+
+## Ratios and weights
 
 All ratios in the app are programmed as 1 for 100%. This makes it easier to do the math.
+```bash
+.2 = 20%
+.02 = 2%
+
+.5 = 50%
+.05 = 5%
+
+1 = 100%
+1.02 = 102%
+1.2 = 120%
+```
+
+All weights are in grams. Yes, even liquids. This makes it accurate to measure and makes a recipe repeatable.
 
 ## Terminology
 
