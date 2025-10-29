@@ -6,6 +6,7 @@ This file contains all basic calculations for the "Bread Buddy" programme.
 
 """
 
+from datetime import datetime, timedelta
 import utils
 
 
@@ -89,3 +90,17 @@ def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp
         # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
 
     return round((ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
+
+def autolyse_timer(duration_minutes=30):
+    """
+    duration_minutes: how long to rest (typically 20-60 min)
+    Returns the time when autolyse is complete
+    """
+    start_time = datetime.now()
+    end_time = start_time + timedelta(minutes=duration_minutes)
+
+    return {
+        "start": start_time.strftime("%H:%M"),
+        "end": end_time.strftime("%H:%M"),
+        "duration": duration_minutes
+    }
