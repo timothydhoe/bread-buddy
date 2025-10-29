@@ -6,6 +6,9 @@ This file contains all basic calculations for the "Bread Buddy" programme.
 
 """
 
+import utils
+
+
 def bakers_percentage(flour_weight, percentages):
     """
     flour: grams
@@ -22,6 +25,7 @@ def bakers_percentage(flour_weight, percentages):
         total_weight += ratio_results[ingredient]
         
     return ratio_results, total_weight
+
 
 def calculate_hydration(flour_weight, water_weight):
     """
@@ -40,6 +44,7 @@ def calculate_hydration(flour_weight, water_weight):
 
     return consistency
 
+
 def recipe_scaler(multiplier, ingredients):
     """
     Takes a multiplication value and a kv dictionary.
@@ -48,6 +53,7 @@ def recipe_scaler(multiplier, ingredients):
     for ingredient, value in ingredients.items():
         ingredients[ingredient] = value * multiplier
     return ingredients
+
 
 def desired_dough_weight(desired_weight, formula):
     """
@@ -66,12 +72,20 @@ def desired_dough_weight(desired_weight, formula):
     return results
     
 
-def desired_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, Celsius=True)
+def desired_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, celsius=True):
     """
     takes (Desired Dough Temp), flour, levain, friction and ambient temp in Celcius.
+
     The friction_fact is set to 0 by default; this is mixing by hand.
     TODO: Add friction factor info pp.138-139
 
     Returns temperature of the water.
     """
-    # water_temp = ddt * 4 - (flour_temp + levain_temp + ambient_temp + friction_fact)
+    if not celsius:
+        ddt = utils.celsius_to_fahrenheit(ddt)
+        flour_temp = utils.celsius_to_fahrenheit(flour_temp)
+        levain_temp = utils.celsius_to_fahrenheit(levain_temp)
+        ambient_temp = utils.celsius_to_fahrenheit(ambient_temp)
+        # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
+
+    return (ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact)
