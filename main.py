@@ -66,7 +66,15 @@ def main():
     print(f"My water: {my_water} in Celsius")
 
     my_water = bc.mixing_water_temperature(celsius=False)
-    print(f"My water: {my_water} in Fahrenheit")
+    print(f"My water: {my_water} in Fahrenheit\n")
+
+    # Calling and printing autolyse_timer()
+    timer = bc.autolyse_timer()
+    for key, value in timer.items():
+        if key == 'duration':
+            print(f"{key}: {value}'")
+        else:
+            print(f"{key}: {value}")
 
 # Run the programme.
 if __name__ == "__main__":
