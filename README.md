@@ -81,6 +81,21 @@ At the end:
 **Baker's Metric**
 
 
+
+## Ratios
+
+All ratios in the app are programmed as 1 for 100%. This makes it easier to do the math.
+
+## Terminology
+
+I will assume that not every programmer is a baker. So, here's a list that you can reference if some jargon ever leaves you baffled.
+I will do my utmost best to keep this list both updated and alphabetical. Yet, I won't make any promises that this is list will be up-to-date at all times.
+
+**Inoculation**
+: *Ripe Sourdough Carryover*
+
+
+
 ## Resources
 
 As an amateur baker, I like good resources on bread baking. So, I'll be listing all resources I'm using here. Most will be books, as I prefer that medium when baking bread and researching topics.
