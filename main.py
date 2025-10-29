@@ -34,47 +34,75 @@ def main():
 
 
     """
-    Everything below is for testing purposes.
+    🧪 Everything below is for testing purposes only.
     """
 
     # Calling and printing bakers percentage.
     ratio_results, total_weight = bc.bakers_percentage(flour_weight, formula)
-
+    print("Ingredients, weight and ratio")
+    print("-----------------------------")
     for ingredient, percentage in ratio_results.items():
         print(f"Ingredient: {ingredient} -- {percentage} -- {round(formula[ingredient]*100)}%")
     print(f"Total dough weight: {total_weight} grams\n")
+    print("---\n")
+
 
     # Calling and printing Hydration function.
+    print("Hydration level")
+    print("---------------")
     hydration = bc.calculate_hydration(flour_weight, ratio_results["water_weight"])
-    print(f"Hydration level: {hydration}\n")
+    print(f"Hydration: {hydration}\n")
+    print("---\n")
+
 
     # Calling and printing Scaling function.
+    print("Scaling function")
+    print("----------------")
     scaled_result = bc.recipe_scaler(scale, ratio_results)
     for ingredient, value in scaled_result.items():
         print(f"{ingredient}: {value}")
-    print()
+    print("---\n")
+
 
     # Calling and printing desired_dough_weight()
+    print("Desired Dough Weight")
+    print("--------------------")
     dough_weight = 1_900
     desired_weight = bc.desired_dough_weight(dough_weight, formula)
     print(f"\nDesidered Total Dough Weight: {dough_weight}")
     for ingredient, value in desired_weight.items():
         print(f"• {ingredient}: {value} grams")
+    print("---\n")
 
-    # Calling and printing desired_water_temperature()
+
+    # Calling and printing mixing_water_temperature()
+    print("Mixing Water Temperature")
+    print("------------------------")
     my_water = bc.mixing_water_temperature()
     print(f"My water: {my_water} in Celsius")
 
     my_water = bc.mixing_water_temperature(celsius=False)
     print(f"My water: {my_water} in Fahrenheit\n")
+    print("---\n")
 
     # Calling and printing autolyse_timer()
+    print("Autolyse timer")
+    print("--------------")
     timer = bc.autolyse_timer()
     for key, value in timer.items():
         if key == 'duration':
             print(f"{key}: {value}'")
         else:
             print(f"{key}: {value}")
+    print("---\n")
+
+
+    # Calling and printing bulk_fermentation_adjuster()
+    print("Bulk Fermentation Calculator")
+    print("----------------------------")
+    bulk_time = bc.bulk_fermentation_adjuster(base_time_hours=4)
+    print(f"\n{bulk_time}")
+    print("---\n")
 
 # Run the programme.
 if __name__ == "__main__":
