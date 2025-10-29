@@ -91,8 +91,10 @@ def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp
 
     return round((ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
 
+
 def autolyse_timer(duration_minutes=30):
     """
+    TODO: needs full development in flask/fast api... whatever...
     duration_minutes: how long to rest (typically 20-60 min)
     Returns the time when autolyse is complete
     """
@@ -103,4 +105,25 @@ def autolyse_timer(duration_minutes=30):
         "start": start_time.strftime("%H:%M"),
         "end": end_time.strftime("%H:%M"),
         "duration": duration_minutes
+    }
+
+def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=22):
+    """
+    base_time_hours: fermentation time at reference temp (default 21°C)
+    reference_temp: the temperature the recipe is designed for (default 22°C).
+    ambient_temp: actual room temperature
+    
+    Returns adjusted fermentation time in hours
+    """
+    temp_difference = reference_temp - ambient_temp
+    # For every 1°C change, fermentation time changes by ~10-15%
+    adjustment_factor = 1.12 ** temp_difference
+    adjusted_time = base_time_hours * adjustment_factor
+    # print(adjusted_time)
+
+    return {
+        "original_time": utils.decimal_hours_to_time(base_time_hours),
+        "adjusted_time": utils.decimal_hours_to_time(adjusted_time),
+        "reference_temp": reference_temp,
+        "ambient_temp": ambient_temp
     }
