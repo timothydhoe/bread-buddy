@@ -105,9 +105,21 @@ def main():
         print(f"{value}: {key}")
     print("---\n")
 
+
+    # Calling and printing feeding_calculator()
+    print("Feeding Calculator")
+    print("------------------")
+    feed = bc.feeding_calculator()
+    for ingredient, value in feed.items():
+        print(f"{ingredient}: {value}")
+    print("---\n")
+
+
 # Run the programme.
 if __name__ == "__main__":
     main()
+
+
 
 
 
