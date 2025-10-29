@@ -16,7 +16,7 @@ A calculator app that helps bakers
 
 Really handy:
 
-**Water temperature calculator** - factors in flour temp, room temp, friction factor to hit target dough temp
+~~**Water temperature calculator** - factors in flour temp, room temp, friction factor to hit target dough temp~~
 
 **Autolyse timer** - just a simple reminder, but bakers forget
 
