@@ -129,15 +129,32 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=
         "ambient_temp": ambient_temp
     }
 
-def feeding_calculator (target_amount=0, feeding_ratio=(1,1,1)):
+def feeding_calculator (target_amount=220, feeding_ratio=(1,1,.2)):
     """
     feeding_ratio: flour:water:inoculation(ripe sourdouh carryover)
 
     WHAT DOES A BAKER ACTUALLY NEED TO KNOW?
         --> I have 50g starter, I want to feed it 1:1:.2, how much flour and water do I add?
         --> I need 200g of active starter for tomorrow's bake, How much do I feed?
+
+    Returns Dict with weights.
     """
-    flour, water, inoculation = feeding_ratio
-    pass
+    if target_amount <= 0:
+        print("You'll need more than that!")
+    else:
+        flour_ratio, water_ratio, inoculation_ratio = feeding_ratio
+        
+        total_ratio = sum(feeding_ratio)
+        part_size = target_amount / total_ratio
+
+        flour_weight = round(flour_ratio * part_size, 1)
+        water_weight = round(water_ratio * part_size, 1)
+        inoculation_weight = round(inoculation_ratio * part_size, 1)
+
+        return {
+            "flour": flour_weight,
+            "water": water_weight,
+            "starter": inoculation_weight
+        }
 
     
