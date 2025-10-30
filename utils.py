@@ -6,16 +6,20 @@ This file contains all helper/auxiliary functions for the "Bread Buddy" programm
 """
 
 def celsius_to_fahrenheit(C):
-    """Returns int"""
+    """Converts Celsius to Fahrenheit.
+
+    Returns int"""
     return round((C * 1.8) + 32, 1)
 
 def fahrenheit_to_Celsius(F):
-    """Returns int"""
+    """Converts Fahrenheit to Celsius.
+    
+    Returns int"""
     return round((F - 32) * (5/9), 1)
 
 def decimal_hours_to_time(hours):
-    """
-    Convert decimal 'time' to hours and minutes.
+    """Convert decimal 'time' to hours and minutes.
+
     Returns string.
     """
     h = int(hours)
