@@ -22,6 +22,7 @@ def main():
     """
     flour_weight = 0
     scale = .5
+    # TODO: make interactive/dynamic in GUI
     formula = {"water_weight": .691, "salt_weight": .018, "levain_weight": .220}
    
 
@@ -61,8 +62,8 @@ def main():
     # Calling and printing Hydration function.
     print("Hydration level")
     print("---------------")
-    hydration = bc.calculate_hydration(flour_weight, recipe["water_weight"])
-    print(f"Hydration: {hydration}\n")
+    hydration_result = bc.calculate_hydration(flour_weight, recipe["water_weight"])
+    print(f"Hydration: {hydration_result["hydration"]} - {hydration_result["description"]}\n")
     print("---\n")
 
 
@@ -89,11 +90,11 @@ def main():
     # Calling and printing mixing_water_temperature()
     print("Mixing Water Temperature")
     print("------------------------")
-    water_temp = bc.mixing_water_temperature()
-    print(f"My water: {water_temp} in Celsius")
+    water_result = bc.mixing_water_temperature()
+    print(f"Water temp: {water_result["water_temp"]}{water_result["unit"]}\n")
 
-    water_temp = bc.mixing_water_temperature(celsius=False)
-    print(f"My water: {water_temp} in Fahrenheit\n")
+    water_result = bc.mixing_water_temperature(celsius=False)
+    print(f"Water temp: {water_result["water_temp"]}{water_result["unit"]}")
     print("---\n")
 
     # Calling and printing autolyse_timer()
@@ -120,10 +121,13 @@ def main():
     # Calling and printing feeding_calculator()
     print("Feeding Calculator")
     print("------------------")
-    feeding_amounts = bc.feeding_calculator()
-    for ingredient, value in feeding_amounts.items():
-        print(f"{ingredient}: {value}")
-    print("---\n")
+    starter_feed = bc.feeding_calculator()
+    if "error" in starter_feed:
+        print(starter_feed["error"])
+    else:
+        for ingredient, weight in starter_feed.items():
+            print(f"{ingredient}: {weight}")
+        print("---\n")
 
 
 # Run the programme.
