@@ -21,6 +21,13 @@ def bakers_percentage(flour_weight, formula):
     Returns:
         dict: All ingredient weights plus total_weight.
     """
+    if not isinstance(flour_weight, (int, float)):
+        raise TypeError("Flour must be a number. Surely, you know that.")
+    if flour_weight <= 0:
+        raise ValueError("Flour weight can't be negative unless you're baking in a parallel universe!")
+    if not isinstance(formula, dict):
+        raise TypeError("Empty recipe? Even a minimalist needs flour!")
+
     recipe = {"flour_weight": flour_weight}
     total_weight = flour_weight
 
