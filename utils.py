@@ -5,6 +5,23 @@ filename: utils.py
 This file contains all helper/auxiliary functions for the "Bread Buddy" programme.
 """
 
+def user_input():
+    """
+    Takes user input and checks for valid integer or float.
+
+    Returns int.
+    """
+    user_input = int((input("How much flour do you plan to use? ")))
+
+    if not isinstance(user_input, (int, float)):
+        raise TypeError(f"'{user_input}' isn't a number, mate. We're baking, not doing poetry!\n")
+    if user_input == 0:
+        raise ValueError("Zero flour means zero bread. Let's be a bit more ambitious!")
+    if user_input < 0:
+        raise ValueError("Negative flour? That's some quantum baking you're attempting, mate!\n")
+
+    return user_input
+
 def celsius_to_fahrenheit(C):
     """Converts Celsius to Fahrenheit.
 
