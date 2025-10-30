@@ -5,6 +5,7 @@ This module provides an interactive command-line interface for amateur and exper
 The program guides users through various calculations including baker's percentages, recipe scaling, water temperature, and sourdough starter feeding.
 """
 import bakers_calculators as bc
+import utils
 
 
 def main():
@@ -29,16 +30,14 @@ def main():
     # User input Control Flow.
     while True:
         try:
-            flour_weight = int(input("How much flour do you plan to use? "))
-            if flour_weight <= 0:
-                print("You will need more flour than that, mate...\n")
-            else:
-                formula["flour_weight"] = 1
-                print()
-                break
-        except (ValueError, TypeError):
-            print("Mate, you're baking bread... You'll need flour!\n")
-    
+            flour_weight = utils.user_input()
+            break
+        except (TypeError, ValueError) as e:
+            print(f"Error: {e}")
+
+    formula["flour_weight"] = 1
+    print()
+  
 
 
 
@@ -47,7 +46,10 @@ def main():
     """
 
     # Calling and printing bakers percentage.
-    recipe = bc.bakers_percentage(flour_weight, formula)
+    try:
+        recipe = bc.bakers_percentage(flour_weight, formula)
+    except (TypeError, ValueError) as e:
+        print(f"Error: {e}")
     # ratio = recipe["ingredients"]
     # total = recipe["total_weight"]
     print("Ingredients, weight and ratio")
