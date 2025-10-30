@@ -34,35 +34,30 @@ def bakers_percentage(flour_weight, formula):
 
 
 def calculate_hydration(flour_weight, water_weight):
-    """Calculates dough hydration percentage and provides consistency description.
-    
-    Hydration is the ratio of water to flour expressed as a percentage. Higher
-    hydration creates wetter, stickier doughs.
+    """Calculates dough hydration and consistency level.
     
     Args:
-        flour_weight (int or float): Weight of flour in grams.
-        water_weight (int or float): Weight of water in grams.
+        flour_weight: Flour weight in grams.
+        water_weight: Water weight in grams.
     
     Returns:
-        str: A string containing the hydration percentage and a description of
-            the expected dough consistency.
-    
-    Example:
-        >>> calculate_hydration(1000, 700)
-        '70.0: standard hydration dough.'
+        dict: Hydration percentage and dough description.
     """
-    hydration = round((water_weight / flour_weight) * 100, 1)
+    hydration_percentage = round((water_weight / flour_weight) * 100, 1)
 
-    if hydration < 60:
-        consistency = f"{hydration}: stiff dough. Good for bagels and pretzels. Or beginner bakers."
-    elif hydration < 70:
-        consistency = f"{hydration}: standard hydration dough."
-    elif hydration < 80:
-        consistency = f"{hydration}: high hydration dough. Good for Focaccia"
+    if hydration_percentage < 60:
+        description = "stiff dough. Good for bagels and pretzels. Or beginner bakers."
+    elif hydration_percentage < 70:
+        description = "standard hydration dough."
+    elif hydration_percentage < 80:
+        description = "high hydration dough. Good for Focaccia."
     else:
-        consistency = f"{hydration}: Very wet... consider getting your swimwear and diving right in"
+        description = "Very wet... consider getting your swimwear and diving right in."
 
-    return consistency
+    return {
+        "hydration": hydration_percentage,
+        "description": description
+    }
 
 
 def recipe_scaler(scale_factor, ingredients):
