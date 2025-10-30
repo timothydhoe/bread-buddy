@@ -11,26 +11,21 @@ import utils
 
 
 def bakers_percentage(flour_weight, formula):
-    """Calculates ingredient weights based on the baker's percentage.
-
-    Args:
-        flour_weight (int or float): Weight of flour in grams.
-        formula (dict): Dictionary mapping ingredient names to their percentages as decimals. For example, {"water": 0.70, "salt": 0.02, "levain": 0.22}.
-        
-    Returns:
-        Dict: A dict containing:
-            - ratio_results (dict): Dictionary with all ingredient weights in grams, including flour.
-            - total_weight (float): Total weight of all ingredients combined in grams.
+    """Calculates ingredient weights from baker's percentages.
     
-    Example:
-        bakers_percentage(1000, {"water": 0.70, "salt": 0.02})
-        ({'flour_weight': 1000, 'water': 700.0, 'salt': 20.0}, 1720.0)
+    Args:
+        flour_weight: Flour weight in grams.
+        formula: Dict of ingredients and their ratios as decimals, 
+                 e.g. {"water_weight": 0.70, "salt_weight": 0.02}.
+    
+    Returns:
+        dict: All ingredient weights plus total_weight.
     """
     recipe = {"flour_weight": flour_weight}
     total_weight = flour_weight
 
-    for ingredient, percent in formula.items():
-        recipe[ingredient] = round(flour_weight * percent, 1)
+    for ingredient, ratio in formula.items():
+        recipe[ingredient] = round(flour_weight * ratio, 1)
         total_weight += recipe[ingredient]
         
     recipe["total_weight"] = total_weight
