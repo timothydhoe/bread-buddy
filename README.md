@@ -26,6 +26,9 @@ essentials and must-haves:
 
 Nice-to-haves:
 
+**Process time calculator** -- When to start if you want to finish by a certain time
+                            --> need full recipe for that?
+
 **Pre-fermented Flour percentage** -- pp.130-131
 
 **Levain percentage** -- pp.130-131
@@ -43,15 +46,15 @@ Nice-to-haves:
 
 **check keyword arguments consistency** --> Same words/patterns across functions
 
-⚠️ **Add docstrings to all functions** --> complete and consistency. I'm going to forget what functions do!
+~~⚠️ **Add docstrings to all functions** --> complete and consistency. I'm going to forget what functions do!~~
 
 ⚠️ **Add input validation** --> negative temps? flour = 0? Check edge cases
 
 **Extract magic numbers to constants** --> like the 1.12 factor in fermentation, friction factors, etc. Put them at top of file
 
-**Add a constants.py file?** --> for default temps, common ratios, friction factors ?too much??
+**Add a constants.py file?** --> for default temps, common ratios, friction factors ? too much, though??
 
-⚠️ **Consistent return types** --> some functions return dicts, some tuples, some strings. Pick one pattern? Which one would suit the app better?
+~⚠️ **Consistent return types** --> some functions return dicts, some tuples, some strings. Pick one pattern? Which one would suit the app better? ALL SHOULD RETURN DICT.~
 
 **Add type hints** --> `def bakers_percentage(flour_weight: int, percentages: dict) -->> dict:` Good idea! 💡
 
@@ -68,9 +71,6 @@ At the end:
 
 **Unit tests** --> test calculations (pytest!)
 
-
-
-
 ## App Name ideas
 
 **Bread Mate**
@@ -85,6 +85,12 @@ At the end:
 **The Baker's Atlas**
 **Dough Decoder**
 **Baker's Metric**
+
+## Comments and Docstrings
+
+I'm using [Google's docstring style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
+
+All ratios in the ap
 
 ## Baker's percentage *aka baker's math*
 
