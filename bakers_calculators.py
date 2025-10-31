@@ -9,6 +9,23 @@ This file contains all basic calculations for the "Bread Buddy" programme.
 from datetime import datetime, timedelta
 import utils
 
+# Calculation constants
+FERMENTATION_ADJUSTMENT_FACTOR = 1.12   # ~12% change per °C
+WATER_TEMP_MULTIPLIER = 4
+
+# Hydration thresholds (in %)
+HYDRATION_LOW = 60
+HYDRATION_MEDIUM = 70
+HYDRATION_HIGH = 80
+
+# Temperature constants
+DEFAULT_DDT = 25
+DEFAULT_FLOUR_TEMP = 22
+DEFAULT_LEVAIN_TEMP = 22
+DEFAULT_AMBIENT_TEMP = 22
+DEFAULT_REFERENCE_TEMP = 21
+
+
 
 def bakers_percentage(flour_weight, formula):
     """Calculates ingredient weights from baker's percentages.
@@ -57,11 +74,11 @@ def calculate_hydration(flour_weight, water_weight):
 
     hydration_percentage = round((water_weight / flour_weight) * 100, 1)
 
-    if hydration_percentage < 60:
+    if hydration_percentage < HYDRATION_LOW:
         description = "stiff dough. Good for bagels and pretzels. Or beginner bakers."
-    elif hydration_percentage < 70:
+    elif hydration_percentage < HYDRATION_MEDIUM:
         description = "standard hydration dough."
-    elif hydration_percentage < 80:
+    elif hydration_percentage < HYDRATION_HIGH:
         description = "high hydration dough. Good for Focaccia."
     else:
         description = "Very wet... consider getting your swimwear and diving right in."
@@ -119,7 +136,7 @@ def desired_dough_weight(desired_weight, formula):
     return recipe
     
 
-def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp=22, friction_fact=0, celsius=True):
+def mixing_water_temperature(ddt=DEFAULT_DDT, flour_temp=DEFAULT_FLOUR_TEMP, levain_temp=DEFAULT_LEVAIN_TEMP, ambient_temp=DEFAULT_AMBIENT_TEMP, friction_fact=0, celsius=True):
     """Calculates water temperature for target dough temperature.
     
     Args:
@@ -140,7 +157,7 @@ def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp
         ambient_temp = utils.celsius_to_fahrenheit(ambient_temp)
         # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
 
-    water_temp = round((ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
+    water_temp = round((ddt * WATER_TEMP_MULTIPLIER) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
 
     if 15 < water_temp > 48:
         raise ValueError("That temperature would either freeze or boil your dough. Let's keep it real!\n")
@@ -170,7 +187,7 @@ def autolyse_schedule(duration_minutes=30):
     }
 
 
-def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=22):
+def bulk_fermentation_adjuster(base_time_hours, reference_temp=DEFAULT_REFERENCE_TEMP, ambient_temp=DEFAULT_AMBIENT_TEMP):
     """Adjusts fermentation time based on room temperature.
     
     Args:
@@ -186,7 +203,7 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=
 
     temp_difference = reference_temp - ambient_temp
     # For every 1°C change, fermentation time changes by ~10-15%
-    adjustment_factor = 1.12 ** temp_difference     # ~12% per °C
+    adjustment_factor = FERMENTATION_ADJUSTMENT_FACTOR ** temp_difference
     # TODO: adjustment_factor for °F.
     adjusted_time_hours = base_time_hours * adjustment_factor
 
