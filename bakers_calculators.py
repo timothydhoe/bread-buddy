@@ -27,7 +27,7 @@ DEFAULT_REFERENCE_TEMP = 21
 
 
 
-def bakers_percentage(flour_weight, formula):
+def bakers_percentage(flour_weight: float, formula: dict) -> dict:
     """Calculates ingredient weights from baker's percentages.
     
     Args:
@@ -52,12 +52,12 @@ def bakers_percentage(flour_weight, formula):
         recipe[ingredient] = round(flour_weight * ratio, 1)
         total_weight += recipe[ingredient]
         
-    recipe["total_weight"] = total_weight
+    recipe["total_weight"] = round(total_weight, 1)
 
     return recipe
 
 
-def calculate_hydration(flour_weight, water_weight):
+def calculate_hydration(flour_weight: float, water_weight: float) -> dict:
     """Calculates dough hydration and consistency level.
     
     Args:
@@ -89,7 +89,7 @@ def calculate_hydration(flour_weight, water_weight):
     }
 
 
-def recipe_scaler(scale_factor, recipe):
+def recipe_scaler(scale_factor: float, recipe: dict) -> dict:
     """Scales a recipe up or down.
     
     Args:
@@ -112,7 +112,7 @@ def recipe_scaler(scale_factor, recipe):
     return scaled_recipe
 
 
-def desired_dough_weight(desired_weight, formula):
+def desired_dough_weight(desired_weight: float, formula: dict) -> dict:
     """Calculates ingredient weights from target dough weight.
     
     Args:
@@ -136,7 +136,14 @@ def desired_dough_weight(desired_weight, formula):
     return recipe
     
 
-def mixing_water_temperature(ddt=DEFAULT_DDT, flour_temp=DEFAULT_FLOUR_TEMP, levain_temp=DEFAULT_LEVAIN_TEMP, ambient_temp=DEFAULT_AMBIENT_TEMP, friction_fact=0, celsius=True):
+def mixing_water_temperature(
+    ddt: float=DEFAULT_DDT,
+    flour_temp: float=DEFAULT_FLOUR_TEMP,
+    levain_temp: float=DEFAULT_LEVAIN_TEMP,
+    ambient_temp: float=DEFAULT_AMBIENT_TEMP,
+    friction_fact: float=0,
+    celsius: bool=True
+) -> dict:
     """Calculates water temperature for target dough temperature.
     
     Args:
@@ -168,7 +175,7 @@ def mixing_water_temperature(ddt=DEFAULT_DDT, flour_temp=DEFAULT_FLOUR_TEMP, lev
     }
 
 
-def autolyse_schedule(duration_minutes=30):
+def autolyse_schedule(duration_minutes: int=30) -> dict:
     """Calculates autolyse rest period start and end times.
     
     Args:
@@ -187,7 +194,11 @@ def autolyse_schedule(duration_minutes=30):
     }
 
 
-def bulk_fermentation_adjuster(base_time_hours, reference_temp=DEFAULT_REFERENCE_TEMP, ambient_temp=DEFAULT_AMBIENT_TEMP):
+def bulk_fermentation_adjuster(
+    base_time_hours: int,
+    reference_temp: float=DEFAULT_REFERENCE_TEMP,
+    ambient_temp: float=DEFAULT_AMBIENT_TEMP
+) -> dict:
     """Adjusts fermentation time based on room temperature.
     
     Args:
@@ -214,7 +225,10 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=DEFAULT_REFERENCE
         "ambient_temp": ambient_temp
     }
 
-def feeding_calculator (target_amount=220, feeding_ratio=(1,1,0.2)):
+def feeding_calculator (
+    target_amount: int=220,
+    feeding_ratio: tuple=(1,1,0.2)
+) -> dict:
     """Calculates sourdough starter feeding amounts.
     
     Args:
