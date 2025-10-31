@@ -48,17 +48,17 @@ Nice-to-haves:
 
 ~~⚠️ **Add docstrings to all functions** --> complete and consistency. I'm going to forget what functions do!~~
 
-⚠️ **Add input validation** --> negative temps? flour = 0? Check edge cases
+~~⚠️ **Add input validation** --> negative temps? flour = 0? Check edge cases~~
 
 **Extract magic numbers to constants** --> like the 1.12 factor in fermentation, friction factors, etc. Put them at top of file
 
 **Add a constants.py file?** --> for default temps, common ratios, friction factors ? too much, though??
 
-~⚠️ **Consistent return types** --> some functions return dicts, some tuples, some strings. Pick one pattern? Which one would suit the app better? ALL SHOULD RETURN DICT.~
+~~⚠️ **Consistent return types** --> some functions return dicts, some tuples, some strings. Pick one pattern? Which one would suit the app better? ALL SHOULD RETURN DICT.~~
 
-**Add type hints** --> `def bakers_percentage(flour_weight: int, percentages: dict) -->> dict:` Good idea! 💡
+~~**Add type hints** --> `def bakers_percentage(flour_weight: int, percentages: dict) -->> dict:` Good idea! 💡~~
 
-⚠️ **Error handling in calculators** --> How to deal with bad/wrong data(types) in your functions?
+~~⚠️ **Error handling in calculators** --> How to deal with bad/wrong data(types) in your functions?~~
 
 At the end:
 
