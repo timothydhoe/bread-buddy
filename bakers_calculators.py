@@ -22,11 +22,11 @@ def bakers_percentage(flour_weight, formula):
         dict: All ingredient weights plus total_weight.
     """
     if not isinstance(flour_weight, (int, float)):
-        raise TypeError("Flour must be a number. Surely, you know that.")
+        raise TypeError("Flour must be a number. Surely, you know that.\n")
     if flour_weight <= 0:
-        raise ValueError("Flour weight can't be negative unless you're baking in a parallel universe!")
+        raise ValueError("Flour weight can't be negative unless you're baking in a parallel universe!\n")
     if not isinstance(formula, dict):
-        raise TypeError("Empty recipe? Even a minimalist needs flour!")
+        raise TypeError("Empty recipe? Even a minimalist needs flour!\n")
 
     recipe = {"flour_weight": flour_weight}
     total_weight = flour_weight
@@ -50,6 +50,11 @@ def calculate_hydration(flour_weight, water_weight):
     Returns:
         dict: Hydration percentage and dough description.
     """
+    if flour_weight <= 0:
+        raise ValueError("Can't calculate hydration without flour. That's just... water!\n")
+    if water_weight <= 0:
+        raise ValueError("Zero water? That's not dough, that's flour dust!\n")
+
     hydration_percentage = round((water_weight / flour_weight) * 100, 1)
 
     if hydration_percentage < 60:
@@ -77,6 +82,13 @@ def recipe_scaler(scale_factor, recipe):
     Returns:
         dict: Scaled recipe.
     """
+    if scale_factor < 0:
+        raise ValueError("Negative scaling? Are we un-baking the bread?\n")
+    if scale_factor == 0:
+        raise ValueError("Scale factor of 0? That's not scaling, that's disappearing!\n")
+    if not isinstance(recipe, dict):
+        raise TypeError("Empty recipe? Even a minimalist needs flour!\n")
+
     scaled_recipe = {}
     for ingredient, weight in recipe.items():
         scaled_recipe[ingredient] = round(weight * scale_factor, 1)
@@ -93,6 +105,9 @@ def desired_dough_weight(desired_weight, formula):
     Returns:
         dict: All ingredient weights in grams.
     """
+    if desired_weight <= 0:
+        raise ValueError(f"We all have desires. Why don't you tell me yours?\n")
+
     total_ratio = sum(ratio for ingredient, ratio in formula.items() if ingredient != "flour_weight")
 
     flour_weight = round(desired_weight / (1 + total_ratio), 1)
@@ -126,6 +141,9 @@ def mixing_water_temperature(ddt=25, flour_temp=22, levain_temp=25, ambient_temp
         # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
 
     water_temp = round((ddt * 4) - (flour_temp + levain_temp + ambient_temp + friction_fact), 1)
+
+    if 15 < water_temp > 48:
+        raise ValueError("That temperature would either freeze or boil your dough. Let's keep it real!\n")
 
     return {
         "water_temp": water_temp,
@@ -163,6 +181,9 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=
     Returns:
         dict: Original and adjusted times, temperatures.
     """
+    if base_time_hours <= 0:
+        raise ValueError("Negative fermentation time? We can't go back in time... yet!\n")
+
     temp_difference = reference_temp - ambient_temp
     # For every 1°C change, fermentation time changes by ~10-15%
     adjustment_factor = 1.12 ** temp_difference     # ~12% per °C
@@ -176,7 +197,7 @@ def bulk_fermentation_adjuster(base_time_hours, reference_temp=21, ambient_temp=
         "ambient_temp": ambient_temp
     }
 
-def feeding_calculator (target_amount=220, feeding_ratio=(1,1,.2)):
+def feeding_calculator (target_amount=220, feeding_ratio=(1,1,0.2)):
     """Calculates sourdough starter feeding amounts.
     
     Args:
@@ -186,12 +207,12 @@ def feeding_calculator (target_amount=220, feeding_ratio=(1,1,.2)):
     Returns:
         dict: Flour, water, and starter weights in grams.
     """
-    if target_amount <= 0:
-        return {
-            "error": "You'll need more than that!"
-        }
-
     flour_ratio, water_ratio, starter_ratio = feeding_ratio
+
+    if flour_ratio <= 0 or water_ratio <= 0:
+        raise ValueError("Can't feed nothing! Even starters need to eat!")
+    if starter_ratio <= 0:
+        raise ValueError("You'll need some starter. I hope you didn't discard it...")
     
     total_ratio = sum(feeding_ratio)
     part_weight = target_amount / total_ratio
