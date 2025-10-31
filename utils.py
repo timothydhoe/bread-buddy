@@ -5,18 +5,25 @@ filename: utils.py
 This file contains all helper/auxiliary functions for the "Bread Buddy" programme.
 """
 
+# Temperature conversion
+FAHRENHEIT_MULTIPLIER = 1.8
+FAHRENHEIT_OFFSET = 32
+
+# Time conversion
+MINUTES_PER_HOUR = 60
+
 def user_input():
     """
     Takes user input and checks for valid integer or float.
 
     Returns int.
     """
-    user_input = int((input("How much flour do you plan to use? ")))
+    user_input = int((input("How many grams of flour do you plan to use? ")))
 
     if not isinstance(user_input, (int, float)):
         raise TypeError(f"'{user_input}' isn't a number, mate. We're baking, not doing poetry!\n")
     if user_input == 0:
-        raise ValueError("Zero flour means zero bread. Let's be a bit more ambitious!")
+        raise ValueError("Zero flour means zero bread. Let's be a bit more ambitious!\n")
     if user_input < 0:
         raise ValueError("Negative flour? That's some quantum baking you're attempting, mate!\n")
 
@@ -26,13 +33,13 @@ def celsius_to_fahrenheit(C):
     """Converts Celsius to Fahrenheit.
 
     Returns int"""
-    return round((C * 1.8) + 32, 1)
+    return round((C * FAHRENHEIT_MULTIPLIER) + FAHRENHEIT_OFFSET, 1)
 
 def fahrenheit_to_Celsius(F):
     """Converts Fahrenheit to Celsius.
     
     Returns int"""
-    return round((F - 32) * (5/9), 1)
+    return round((F - FAHRENHEIT_OFFSET) * (5/9), 1)
 
 def decimal_hours_to_time(hours):
     """Convert decimal 'time' to hours and minutes.
@@ -40,7 +47,7 @@ def decimal_hours_to_time(hours):
     Returns string.
     """
     h = int(hours)
-    m = int((hours - h) * 60)
+    m = int((hours - h) * MINUTES_PER_HOUR)
     return f"{h}h {m}min"
 
 """ QUICK CONVERSION TEST
