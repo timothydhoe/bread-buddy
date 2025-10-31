@@ -24,7 +24,7 @@ def main():
     flour_weight = 0
     scale = .5
     # TODO: make interactive/dynamic in GUI
-    formula = {"water_weight": 0, "salt_weight": .018, "levain_weight": .220}
+    formula = {"water_weight": 0.691, "salt_weight": .018, "levain_weight": .220}
    
 
     # User input Control Flow.
@@ -38,8 +38,6 @@ def main():
     formula["flour_weight"] = 1
     print()
   
-
-
 
     """
     🧪 Everything below is for testing purposes only.
