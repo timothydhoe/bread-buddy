@@ -29,11 +29,15 @@ def home():
             
             # Calculate
             result = bc.bakers_percentage(flour_weight, formula)
-            
+            hydration_result = bc.calculate_hydration(flour_weight, result['water_weight'])
+
         except (ValueError, TypeError) as e:
             error = str(e)
         
-    return render_template('index.html', result=result, error=error)
+    return render_template('index.html',
+                            result=result,
+                            hydration_result=hydration_result,
+                            error=error)
 
 
 # @app.route('/bakers-percentage', methods=['GET', 'POST'])

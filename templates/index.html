@@ -68,6 +68,10 @@
                                 <td><strong>{{ result.total_weight }} g</strong></td>
                             </tr>
                         </table>
+                        <div class="hydration-info">
+                            <h3>Hydration Level: {{ hydration_result.hydration }}%</h3>
+                            <p>{{ hydration_result.description }}</p>
+                        </div>
                     </div>
                     {% endif %}
                 </form>
