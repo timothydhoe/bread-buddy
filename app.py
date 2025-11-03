@@ -10,6 +10,7 @@ def home():
 
     """Baker's percentage calculator"""
     result = None
+    hydration_result = None
     error = None
 
     if request.method == 'POST':
