@@ -11,13 +11,6 @@ Font Newsreader: https://fonts.google.com/selection/embed
   font-size: 16px;
 }
 
-.back-link {
-    display: inline-block;
-    margin-top: 10px;
-    color: #8b4513;
-    text-decoration: none;
-}
-
 .calculator-container {
     background: white;
     padding: 30px;
@@ -88,6 +81,19 @@ button:hover {
 .results .total td {
     border-top: 2px solid #8b4513;
     padding-top: 15px;
+}
+
+.hydration-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    border-radius: 4px;
+}
+
+.hydration-info h3 {
+    color: #2e7d32;
+    margin-bottom: 5px;
 }
 
 .error {
