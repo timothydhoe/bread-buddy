@@ -1,2 +1,29 @@
-.ds_store
-__pycache__
+# OS
+.DS_store
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask stuff
+instance/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
