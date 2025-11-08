@@ -50,20 +50,25 @@ def decimal_hours_to_time(hours):
     m = int((hours - h) * MINUTES_PER_HOUR)
     return f"{h}h {m}min"
 
-""" QUICK CONVERSION TEST
-print("Celsius to Fahrenheit")
-print("---------------------")
-print(f"flour:      {celsius_to_fahrenheit(22)}")
-print(f"levain:     {celsius_to_fahrenheit(25)}")
-print(f"ambient:    {celsius_to_fahrenheit(22)}")
-print(f"friction:   {celsius_to_fahrenheit(0)}")
-print(f"ddt:        {celsius_to_fahrenheit(25)}")
+# Calculate percentages
+def pct_of(pct, 100):
+    """ Calculate percentage of a value.
+    
+    Example: percent_of(20, 1000) = 200  (20% of 1000)
+    """ 
+    return (percentage / 100) * value
 
-print("\nFahrenheit to Celsius")
-print("---------------------")
-print(f"flour:      {fahrenheit_to_Celsius(72)}")
-print(f"levain:     {fahrenheit_to_Celsius(78)}")
-print(f"ambient:    {fahrenheit_to_Celsius(72)}")
-print(f"friction:   {fahrenheit_to_Celsius(32)}")
-print(f"ddt:        {fahrenheit_to_Celsius(78)}")
-"""
+def pct_ratio(part, whole):
+    """ Calculate what percentage one value is of another.
+    
+    Example: as_percentage_of(200, 1000) = 20  (200 is 20% of 1000)
+    """
+    return (part / whole) * 100
+
+def pct_change(orginal, new):
+     """ Calculate percentage increase/decrease between two values.
+    
+    Example: percentage_change(1000, 1200) = 20  (20% increase)
+             percentage_change(1000, 800) = -20  (20% decrease)
+    """
+    return ((new - original) / original) * 100

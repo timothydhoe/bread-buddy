@@ -10,6 +10,8 @@ Within the recipe, smaller ingredient tables are presented: Levain and Dough. Th
 
 """
 
+import utils
+
 class Vitals:
     """
     """
@@ -28,25 +30,54 @@ class Vitals:
 class TotalFormula:
     """
     """
-    def __init__(self, flour_1, water_1, water_2, salt, ripe_starter):
-        self.flour_1 = flour_1
-        self.water_1 = water_1
-        self.water_2 = water_2
-        self.salt = salt
+    def __init__(self):
+        self.flours = {}
+        self.water = water
         self.ripe_starter = ripe_starter
+        self.salt = salt
+        self.ingredients = {}
 
+        def add_flour(self, name, grams):
+            """ Add a flour type and its weight."""
+            self.flours[name] = grams
+
+        def add_ingredient(self, name, grams):
+            """ Add an ingredient and its weight."""
+            self.ingredients[name] = grams
+
+        def remove_ingredient(self, name):
+            if name in flours:
+                flours.pop(name)
+            elif name in ingredients:
+                ingredients.pop(name)
+
+            return f"{name} removed."
+
+        def divide_water():
+            # Idea to divide water, never pour total water at once,
+            # keep about 10% on the side to add after if needed.
+            pass
+
+        @property
+        def flour_ratio(self):
+            flours_ratio = {}
+            """ Calculate ratio of all flours used"""
+            whole = sum(flours.values()) # TODO: Return ratio of flours not sum.
+            for flour in flours:
+                flours_ratio[flour] = pct_ratio(flour, whole)
+
+            return flours_ratio
 
 class Levain:
-    def __init__(self, flour_1, water_1, ripe_starter):
+    def __init__(self, flour_1, water, ripe_starter):
         self.flour_1 = flour_1
-        self.water_1 = water_1
+        self.water = water
         self.ripe_starter = ripe_starter
 
 
 class Dough:
-    def __init__(self, flour_1, water_1, water_2, salt, levain):
+    def __init__(self, flour_1, water_1, salt, levain):
         self.flour_1 = flour_1
         self.water_1 = water_1
-        self.water_2 = water_2
         self.salt = salt
         self.levain = levain
