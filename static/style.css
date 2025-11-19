@@ -11,6 +11,22 @@ Font Newsreader: https://fonts.google.com/selection/embed
   font-size: 16px;
 }
 
+hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 2px solid #ddd;
+}
+
+h3 {
+    color: #8b4513;
+    margin-bottom: 15px;
+}
+
+input[type="range"] {
+    width: 80%;
+    margin-right: 10px;
+}
+
 .calculator-container {
     background: white;
     padding: 30px;
@@ -83,6 +99,13 @@ button:hover {
     padding-top: 15px;
 }
 
+.additional-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
 .hydration-info {
     margin-top: 20px;
     padding: 15px;
@@ -94,6 +117,42 @@ button:hover {
 .hydration-info h3 {
     color: #2e7d32;
     margin-bottom: 5px;
+}
+
+#scale_display {
+    font-weight: bold;
+    color: #d4a574;
+    font-size: 1.1em;
+}
+
+.water-temp-info,
+.fermentation-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+}
+
+.fermentation-info {
+    background: #fff3e0;
+    border-left-color: #ff9800;
+}
+
+.water-temp-info h3,
+.fermentation-info h3 {
+    color: #1565c0;
+    margin-bottom: 10px;
+}
+
+.fermentation-info h3 {
+    color: #e65100;
+}
+
+.info-text {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
 }
 
 .error {

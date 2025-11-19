@@ -14,6 +14,8 @@
 
         <main>
             <div class="calculator-container">
+                <h3>Main Recipe Settings</h3>
+                <p class="info-text">Tweak all ingredients to your recipe.</p>
                 <form action="" method="POST">
                     <div class="form-group">
                         <label for="flour_weight">Flour weight (grams):</label>
@@ -38,6 +40,43 @@
                         <input type="number" id="levain_ratio" name="levain_ratio" value="20" step="0.1">
                     </div>
 
+                    <hr>
+                    <div class="additional-container">
+                        <h3>Additional Recipe Settings</h3>
+                        <p class="info-text">Adjust depending on the recipe, how much time you have or on the temperatures you're measuring.</p>
+
+                        <div class="form-group">
+                            <label for="scale_factor">Scale Recipe (multiplier):</label>
+                            <input type="range" id="scale_factor" name="scale_factor" 
+                                min="0.5" max="3" step="0.1" value="1">
+                            <span id="scale_display">1x</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ambient_temp">Room Temperature (°C):</label>
+                            <input type="number" id="ambient_temp" name="ambient_temp" 
+                                value="22" step="0.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ambient_temp">Room Temperature (°C):</label>
+                            <input type="number" id="ambient_temp" name="ambient_temp" 
+                                value="22" step="0.5" min="10" max="35">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="target_dough_temp">Target Dough Temperature (°C):</label>
+                            <input type="number" id="target_dough_temp" name="target_dough_temp" 
+                                value="25" step="0.5" min="18" max="30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="base_fermentation">Base Fermentation Time (hours):</label>
+                            <input type="number" id="base_fermentation" name="base_fermentation" 
+                                value="4" step="0.5" min="1" max="24">
+                        </div>
+                    </div>
+
                     <button type="submit">Calculate</button>
 
                     {% if error %}
@@ -52,7 +91,7 @@
                         <h2>Your Recipe:</h2>
                         <table>
                             <tr>
-                                <th>Ingreident</th>
+                                <th>Ingredient</th>
                                 <th>Weight (g)</th>
                             </tr>
                             {% for ingredient, weight in result.items() %}
@@ -70,12 +109,34 @@
                         </table>
                         <div class="hydration-info">
                             <h3>Hydration Level: {{ hydration_result.hydration }}%</h3>
-                            <p>{{ hydration_result.description }}</p>
+                            <p class="info-text">{{ hydration_result.description }}</p>
+                        </div>
+
+                        <div class="water-temp-info">
+                            <h3>💧 Water Temperature</h3>
+                            <p><strong>{{ water_temp_result.water_temp }}{{ water_temp_result.unit }}</strong></p>
+                            <p class="info-text">Use this water temperature to hit your target dough temp</p>
+                        </div>
+
+                        <div class="fermentation-info">
+                            <h3>⏰ Bulk Fermentation</h3>
+                            <p>Base time: <strong>{{ fermentation_result.base_time }}</strong></p>
+                            <p>Adjusted for {{ fermentation_result.ambient_temp }}°C room temperature: 
+                               <strong>{{ fermentation_result.adjusted_time }}</strong></p>
                         </div>
                     </div>
                     {% endif %}
                 </form>
             </div>
         </main>
+        <script>
+            // Scaling script
+            const slider = document.getElementById('scale_factor');
+            const display = document.getElementById('scale_display');
+            
+            slider.addEventListener('input', function() {
+                display.textContent = this.value + 'x';
+            });
+        </script>
     </body>
 </html>

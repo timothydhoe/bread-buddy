@@ -51,12 +51,12 @@ def decimal_hours_to_time(hours):
     return f"{h}h {m}min"
 
 # Calculate percentages
-def pct_of(pct, 100):
+def pct_of(pct, value):
     """ Calculate percentage of a value.
     
     Example: percent_of(20, 1000) = 200  (20% of 1000)
     """ 
-    return (percentage / 100) * value
+    return (pct / 100) * value
 
 def pct_ratio(part, whole):
     """ Calculate what percentage one value is of another.
@@ -65,8 +65,8 @@ def pct_ratio(part, whole):
     """
     return (part / whole) * 100
 
-def pct_change(orginal, new):
-     """ Calculate percentage increase/decrease between two values.
+def pct_change(original, new):
+    """ Calculate percentage increase/decrease between two values.
     
     Example: percentage_change(1000, 1200) = 20  (20% increase)
              percentage_change(1000, 800) = -20  (20% decrease)
