@@ -7,9 +7,6 @@ A Recipe is a container Class for Ingredients.
 
 """
 
-from ingredient import Ingredient
-
-
 class Recipe:
     """ An Ingredient in a bread recipe.
 
@@ -20,7 +17,7 @@ class Recipe:
         name: str   -- default="My Recipe"
         ingredients: list[Ingredient]
 
-        
+
     """
     def __init__(self, name: str = "My Recipe"):
         self._name = name
@@ -31,7 +28,8 @@ class Recipe:
     def name(self):
         return self._name
 
-    @name.setter(self):
+    @name.setter
+    def name(self):
         pass
 
     def __str__(self):
@@ -40,32 +38,41 @@ class Recipe:
     def __repr__(self):
         return f"Recipe: name={self.name}, ingredients={self.ingredients}"
 
-    add_ingredient(self, ingredient: Ingredient):
+    def add_ingredient(self, ingredient):
         """ Add an ingredient to the recipe."""
-        pass
+        if ingredient not in self.ingredients:
+            self.ingredients.append(ingredient)
+        else:
+            pass
 
-    remove_ingredient(self, ingredient: Ingredient):
+    def remove_ingredient(self, ingredient):
         """ Remove an ingredient from the recipe."""
-        pass
+        if ingredient in self.ingredients:
+            self.ingredients.remove(ingredient)
 
     @property
-    total_flour_weight(self):
+    def total_flour_weight(self):
         """ Sum of all flours."""
         pass
 
     @property
-    total_liquid_weight(self):
+    def total_liquid_weight(self):
         """ Sum of all liquids."""
         pass
 
     @property
-    total_weight(self):
+    def total_weight(self):
         """ Sum of all liquids."""
         pass
 
     @property
-    hydration_percentage(self):
+    def hydration_percentage(self):
         """ Calculate the hydration of the dough. """
+        pass
+
+    def divide_water():
+        # Idea to divide water, never pour total water at once,
+        # keep about 10% on the side to add after if needed.
         pass
 
     def validate(self):
@@ -86,7 +93,6 @@ class Recipe:
     def from_dict(data: dict):
         """ For loading purposes."""
         pass
-
 
 
 recipe_test = Recipe("My First Bread")
