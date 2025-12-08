@@ -38,7 +38,7 @@ class Ingredient:
 
     def __init__(
         self,
-        name: str,
+        name: str,  # Name should be category when water?
         weight: float=1.0,
         category: str="other",
         ratio: float=None,
@@ -126,8 +126,8 @@ class Ingredient:
 
     @classmethod
     def from_ratio(
-        cls, name: str, flour_weight: float, ratio: float, category: str = "other"
-    ):
+        cls, name: str, flour_weight: float,
+        ratio: float, category: str = "other"):
         """Create ingredient from baker's percentage.
 
         Usage:
@@ -163,3 +163,9 @@ class Ingredient:
             data.get("category", "other"),
             data.get("ratio"),
         )
+
+
+
+## TEST ##
+rye = Ingredient('rye', 500, "flour")
+print(rye)

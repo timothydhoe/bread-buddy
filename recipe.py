@@ -19,7 +19,7 @@ class Recipe:
 
 
     """
-    def __init__(self, name: str = "My Recipe"):
+    def __init__(self, name: str="My Recipe"):
         self._name = name
         self.ingredients = []  # List of ingredient objects .. OR DICT???
 
@@ -42,8 +42,6 @@ class Recipe:
         """ Add an ingredient to the recipe."""
         if ingredient not in self.ingredients:
             self.ingredients.append(ingredient)
-        else:
-            pass
 
     def remove_ingredient(self, ingredient):
         """ Remove an ingredient from the recipe."""
@@ -62,7 +60,7 @@ class Recipe:
 
     @property
     def total_weight(self):
-        """ Sum of all liquids."""
+        """ Sum of all ingredients' weight."""
         pass
 
     @property
