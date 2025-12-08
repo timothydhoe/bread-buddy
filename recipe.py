@@ -3,7 +3,7 @@ filename: recipe.py
 -------------------------------
 
 This file contains the Recipe class for bread recipes.
-A Recipe is a container for Ingredients.
+A Recipe is a container Class for Ingredients.
 
 """
 
@@ -11,6 +11,17 @@ from ingredient import Ingredient
 
 
 class Recipe:
+    """ An Ingredient in a bread recipe.
+
+    Represents a single ingredient with its weight and optional baker's
+    percentage ratio. Supports scaling and validation.
+
+    Params:
+        name: str   -- default="My Recipe"
+        ingredients: list[Ingredient]
+
+        
+    """
     def __init__(self, name: str = "My Recipe"):
         self._name = name
         self.ingredients = []  # List of ingredient objects .. OR DICT???
