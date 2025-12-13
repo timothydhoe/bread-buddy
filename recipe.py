@@ -58,7 +58,7 @@ class Recipe:
     @property
     def total_liquid_weight(self):
         """ Sum of all water and starter ingredients"""
-        return sum(ingredients.weight for ingredient in self.ingredients if ingredient.category in ('water', 'starter'))
+        return sum(ingredient.weight for ingredient in self.ingredients if ingredient.category in ('water', 'starter'))
 
     @property
     def total_weight(self):
@@ -74,7 +74,7 @@ class Recipe:
         flour = self.total_flour_weight
         if flour == 0:
             return 0
-        return round((self.total.total_liquid_weight / flour) * 100, 1)
+        return round((self.total_liquid_weight / flour) * 100, 1)
 
     def divide_water():
         # Idea to divide water, never pour total water at once,
@@ -93,6 +93,10 @@ class Recipe:
         scaled = Recipe(f"{self.name} (scaled {factor}x)")
         scaled.ingredients = [ingredient.scale(factor) for ingredient in self.ingredients]
         return scaled
+
+    @classmethod
+    def from_bakers_percentage(cls, name, flour_weight, formula):
+        """ """
 
     def to_dict(self):
         """ For saving purposes in JSON """
