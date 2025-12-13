@@ -7,6 +7,8 @@ A Recipe is a container Class for Ingredients.
 
 """
 
+from ingredient import Ingredient
+
 class Recipe:
     """ An Ingredient in a bread recipe.
 
@@ -33,7 +35,7 @@ class Recipe:
         pass
 
     def __str__(self):
-        return f"Recipe: {self.name}/n  {self.ingredients}"
+        return f"Recipe: {self.name}\n  {self.ingredients}"
 
     def __repr__(self):
         return f"Recipe: name={self.name}, ingredients={self.ingredients}"
@@ -50,23 +52,29 @@ class Recipe:
 
     @property
     def total_flour_weight(self):
-        """ Sum of all flours."""
-        pass
+        """ Sum of all flours ingredients"""
+        return sum(ingredient.weight for ingredient in self.ingredients if ingredient.category == 'flour')
 
     @property
     def total_liquid_weight(self):
-        """ Sum of all liquids."""
-        pass
+        """ Sum of all water and starter ingredients"""
+        return sum(ingredients.weight for ingredient in self.ingredients if ingredient.category in ('water', 'starter'))
 
     @property
     def total_weight(self):
-        """ Sum of all ingredients' weight."""
-        pass
+        """ Sum of all ingredients."""
+        return sum(ingredient.weight for ingredient in self.ingredients)
 
     @property
     def hydration_percentage(self):
-        """ Calculate the hydration of the dough. """
-        pass
+        """ Calculate the hydration of the dough. 
+
+            Formula: (liquids / flour) * 100
+        """
+        flour = self.total_flour_weight
+        if flour == 0:
+            return 0
+        return round((self.total.total_liquid_weight / flour) * 100, 1)
 
     def divide_water():
         # Idea to divide water, never pour total water at once,
@@ -81,17 +89,37 @@ class Recipe:
         pass
 
     def scale(self, factor: float):
-        """ Return a new recipe with all ingredients scaled."""
-        pass
+        """ Return a new scaled recipe"""
+        scaled = Recipe(f"{self.name} (scaled {factor}x)")
+        scaled.ingredients = [ingredient.scale(factor) for ingredient in self.ingredients]
+        return scaled
 
     def to_dict(self):
-        """ For saving purposes. """
-        pass
+        """ For saving purposes in JSON """
+        return {
+            "name": self.name,
+            "ingredients": [ingredient.to_dict() for ingredient in self.ingredients]
+        }
 
-    def from_dict(data: dict):
-        """ For loading purposes."""
-        pass
+    @classmethod
+    def from_dict(cls, data: dict):
+        """ Reload from dict."""
+        from ingredient import Ingredient
+        recipe = cls(data["name"])
+        recipe.ingredients = [Ingredient.from_dict(ingredient) for ingredient in data["ingredients"]]
+        return recipe
 
 
-recipe_test = Recipe("My First Bread")
-print(recipe_test)
+rye = Ingredient('rye', 500, 'flour')
+water = Ingredient('WAter', 300, 'water')
+salt = Ingredient('salt', 10, 'salt')
+# starter = Levain()
+
+the_one = Recipe("My First Loaf")
+print(the_one)
+
+the_one.add_ingredient(rye)
+the_one.add_ingredient(water)
+the_one.add_ingredient(salt)
+
+print(the_one)

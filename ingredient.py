@@ -41,15 +41,16 @@ class Ingredient:
         name: str,  # Name should be category when water?
         weight: float=1.0,
         category: str="other",
-        ratio: float=None,
+        ratio: float=None
     ):
         # Validate ratio (if provided)
         if ratio is not None and (ratio < 0 or ratio > 2.0):
             raise ValueError(f"Ratio should be between 0 and 2.0. (got {ratio})")
-
-        # TODO: Need to add a type name? eg. flour, ...   ?
-        self.name = name
         self.category = category
+        if self.category == 'water':
+            self.name = category
+        else:
+            self.name = name
         self._weight = None
         self.weight = weight
         self.ratio = ratio
