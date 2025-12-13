@@ -96,7 +96,45 @@ class Recipe:
 
     @classmethod
     def from_bakers_percentage(cls, name, flour_weight, formula):
-        """ """
+        """ Create Recipe from flour weight + ratios.
+        Args:
+            name: Recipe name
+            flour_weight: Total flour weight in grams
+            formula: Dict like {"water": 0.70, "salt": 0.02, "starter": 0.20}
+        
+        Returns:
+            Recipe with ingredients created from ratios
+        """
+
+        recipe = cls(name)
+
+        flour = Ingredient("flour", flour_weight, "flour", ratio=1.0)
+        recipe.add_ingredient(flour)
+
+        category_map = {
+            "water": "water",
+            "salt": "salt", 
+            "starter": "starter",
+            "levain": "starter"
+        }
+
+        for ingredient_name, ratio in formula.items():
+            # Strip "_weight" suffix if present (for backward compatibility)
+            clean_name = ingredient_name.replace("_weight", "")
+            
+            # Determine category
+            category = category_map.get(clean_name, "other")
+            
+            # Create ingredient using from_ratio
+            ing = Ingredient.from_ratio(
+                name=clean_name,
+                flour_weight=flour_weight,
+                ratio=ratio,
+                category=category
+            )
+            recipe.add_ingredient(ing)
+        
+        return recipe
 
     def to_dict(self):
         """ For saving purposes in JSON """
@@ -114,16 +152,35 @@ class Recipe:
         return recipe
 
 
-rye = Ingredient('rye', 500, 'flour')
-water = Ingredient('WAter', 300, 'water')
-salt = Ingredient('salt', 10, 'salt')
-# starter = Levain()
+# rye = Ingredient('rye', 500, 'flour')
+# water = Ingredient('WAter', 300, 'water')
+# salt = Ingredient('salt', 10, 'salt')
+# # starter = Levain()
 
-the_one = Recipe("My First Loaf")
-print(the_one)
+# the_one = Recipe("My First Loaf")
+# print(the_one)
 
-the_one.add_ingredient(rye)
-the_one.add_ingredient(water)
-the_one.add_ingredient(salt)
+# the_one.add_ingredient(rye)
+# the_one.add_ingredient(water)
+# the_one.add_ingredient(salt)
 
-print(the_one)
+# print(the_one)
+
+recipe = Recipe.from_bakers_percentage(
+    "My Sourdough",
+    1000,
+    {"water": 0.70, "salt": 0.02, "starter": 0.20}
+)
+
+print(recipe)
+print(f"Total weight: {recipe.total_weight}g")
+print(f"Hydration: {recipe.hydration_percentage}%")
+"""
+
+Should output:
+```
+Recipe: My Sourdough
+  [flour, water, salt, starter ingredients]
+Total weight: 1920.0g
+Hydration: 90.0%
+"""
