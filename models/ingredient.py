@@ -1,6 +1,6 @@
 """
 filename: ingredient.py
--------------------------------
+------------------------
 
 This file contains the Ingredient class for bread recipes.
 
@@ -41,7 +41,8 @@ class Ingredient:
         name: str,  # Name should be category when water?
         weight: float=1.0,
         category: str="other",
-        ratio: float=None
+        ratio: float=None,
+        starter_hydration: float=100
     ):
         # Validate ratio (if provided)
         if ratio is not None and (ratio < 0 or ratio > 2.0):
@@ -54,6 +55,7 @@ class Ingredient:
         self._weight = None
         self.weight = weight
         self.ratio = ratio
+        self.starter_hydration = starter_hydration
 
     @property
     def name(self):
@@ -143,7 +145,7 @@ class Ingredient:
         if factor <= 0:
             raise ValueError(f"Scale factor must be positive. (got {factor})")
 
-        return Ingredient(self.name, self.weight * factor, self.category, self.ratio)
+        return Ingredient(self.name, self.weight * factor, self.category, self.ratio, self.starter_hydration)
         
 
     def to_dict(self) -> dict:
@@ -153,6 +155,7 @@ class Ingredient:
             "weight": self.weight,
             "category": self.category,
             "ratio": self.ratio,
+            "starter_hydration": self.starter_hydration
         }
 
     @classmethod
@@ -163,10 +166,11 @@ class Ingredient:
             data.get("weight", 0),
             data.get("category", "other"),
             data.get("ratio"),
+            data.get("starter_hydration", 100)
         )
 
 
 
 ## TEST ##
-rye = Ingredient('rye', 500, "flour")
-print(rye)
+# rye = Ingredient('rye', 500, "flour")
+# print(rye)
