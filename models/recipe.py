@@ -1,13 +1,13 @@
 """
 filename: recipe.py
--------------------------------
+-------------------
 
 This file contains the Recipe class for bread recipes.
 A Recipe is a container Class for Ingredients.
 
 """
 
-from ingredient import Ingredient
+from .ingredient import Ingredient
 
 class Recipe:
     """ An Ingredient in a bread recipe.
@@ -57,8 +57,18 @@ class Recipe:
 
     @property
     def total_liquid_weight(self):
-        """ Sum of all water and starter ingredients"""
-        return sum(ingredient.weight for ingredient in self.ingredients if ingredient.category in ('water', 'starter'))
+        """ Sum of all water and the water in starters"""
+        liquid = 0
+        
+        for ingredient in self.ingredients:
+            if ingredient.category == 'water':
+                liquid += ingredient.weight
+            elif ingredient.category == 'starter':
+                # formula: starter_weight * (hydration/ (100+hydration))
+                hydration = ingredient.starter_hydration / 100
+                liquid_part = ingredient.weight * (hydration / (1 + hydration))
+                liquid += liquid_part
+            return liquid
 
     @property
     def total_weight(self):
@@ -146,7 +156,7 @@ class Recipe:
     @classmethod
     def from_dict(cls, data: dict):
         """ Reload from dict."""
-        from ingredient import Ingredient
+        from .ingredient import Ingredient
         recipe = cls(data["name"])
         recipe.ingredients = [Ingredient.from_dict(ingredient) for ingredient in data["ingredients"]]
         return recipe
@@ -166,21 +176,13 @@ class Recipe:
 
 # print(the_one)
 
-recipe = Recipe.from_bakers_percentage(
-    "My Sourdough",
-    1000,
-    {"water": 0.70, "salt": 0.02, "starter": 0.20}
-)
+# recipe = Recipe.from_bakers_percentage(
+#     "My Sourdough",
+#     1000,
+#     {"water": 0.70, "salt": 0.02, "starter": 0.20}
+# )
 
-print(recipe)
-print(f"Total weight: {recipe.total_weight}g")
-print(f"Hydration: {recipe.hydration_percentage}%")
-"""
+# print(recipe)
+# print(f"Total weight: {recipe.total_weight}g")
+# print(f"Hydration: {recipe.hydration_percentage}%")
 
-Should output:
-```
-Recipe: My Sourdough
-  [flour, water, salt, starter ingredients]
-Total weight: 1920.0g
-Hydration: 90.0%
-"""
