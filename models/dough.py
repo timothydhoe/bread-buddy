@@ -8,7 +8,6 @@ All temperatures units used are in Celcius, but can be converted using utils.cel
 """
 
 from datetime import datetime, timedelta
-from recipe import Recipe
 import utils
 
 FERMENTATION_ADJUSTMENT_FACTOR = 1.12
@@ -135,11 +134,11 @@ class Dough:
 
 
 
-recipe = Recipe.from_bakers_percentage("Test", 1000, {"water": 0.70, "salt": 0.02})
-dough = Dough(recipe)
-print(dough)
+# recipe = Recipe.from_bakers_percentage("Test", 1000, {"water": 0.70, "salt": 0.02})
+# dough = Dough(recipe)
+# print(dough)
 
-print(dough.hydration)  # 70.0
-print(dough.hydration_description)  # 70.0
-print(dough.hydration_description)  # "standard hydration dough"
-print(dough.calculate_water_temperature(target_temp=25))
+# print(dough.hydration) 
+# print(dough.hydration_description) 
+# print(dough.hydration_description)  
+# print(dough.calculate_water_temperature(target_temp=25))

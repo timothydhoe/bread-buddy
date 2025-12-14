@@ -86,12 +86,9 @@ class Levain(Recipe):
         )
         
         return feeding_recipe
-
-
-    
         
 
-starter = Levain("My Starter")
-print(starter.calculate_feeding(220))
-feeding_recipe = starter.create_feeding_recipe(220)
-print(feeding_recipe)
+# starter = Levain("My Starter")
+# print(starter.calculate_feeding(220))
+# feeding_recipe = starter.create_feeding_recipe(220)
+# print(feeding_recipe)
