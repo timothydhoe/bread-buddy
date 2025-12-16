@@ -1,6 +1,6 @@
 """
 filename: levain.py
--------------------------------
+-------------------
 
 This file contains the Levain class. This is basically a Recipe so the Levain Class is a Subclass from Recipe. 
 
@@ -11,8 +11,8 @@ params:
 
 #TODO: method to add ingredients like sugar!!
 
-from ingredient import Ingredient
-from recipe import Recipe
+from .ingredient import Ingredient
+from .recipe import Recipe
 
 class Levain(Recipe):
     """ A Levain/Starter class, based on the Recipe class.

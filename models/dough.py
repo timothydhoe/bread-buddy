@@ -1,6 +1,6 @@
 """
 filename: dough.py
--------------------------------
+-------------------
 
 This file contains the Dough class for bread recipes.
 All temperatures units used are in Celcius, but can be converted using utils.celsius_to_fahrenheit().
@@ -131,8 +131,6 @@ class Dough:
             "end": end_time.strftime("%H:%M"),
             "duration": duration_minutes
         }
-
-
 
 # recipe = Recipe.from_bakers_percentage("Test", 1000, {"water": 0.70, "salt": 0.02})
 # dough = Dough(recipe)

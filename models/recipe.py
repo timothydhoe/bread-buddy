@@ -68,7 +68,8 @@ class Recipe:
                 hydration = ingredient.starter_hydration / 100
                 liquid_part = ingredient.weight * (hydration / (1 + hydration))
                 liquid += liquid_part
-            return liquid
+                
+        return liquid
 
     @property
     def total_weight(self):
