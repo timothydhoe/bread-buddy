@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Package manager
+
+This project uses [uv](https://docs.astral.sh/uv/). Dependencies are declared in `pyproject.toml`; the lock file is `uv.lock`.
+
+```bash
+uv sync                  # install/sync dependencies
+uv run python app.py     # run without activating venv manually
+```
+
 ## Running the app
 
 ```bash

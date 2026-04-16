@@ -1,7 +1,9 @@
 # OS
-.DS_store
+.DS_Store
+Thumbs.db
 
 # Virtual environment
+.venv/
 venv/
 env/
 ENV/
@@ -21,9 +23,11 @@ instance/
 .idea/
 *.swp
 
-# OS files
-.DS_Store
-Thumbs.db
-
 # Testing
 .pytest_cache/
+
+# Linter cache
+.ruff_cache/
+
+# Local research/reference docs (never commit)
+.sources/
