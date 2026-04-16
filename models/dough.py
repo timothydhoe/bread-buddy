@@ -3,11 +3,9 @@ filename: dough.py
 -------------------
 
 This file contains the Dough class for bread recipes.
-All temperatures units used are in Celcius, but can be converted using utils.celsius_to_fahrenheit().
-
+All temperature units are in Celsius. Use utils.celsius_to_fahrenheit() for display.
 """
 
-from datetime import datetime, timedelta
 import utils
 
 FERMENTATION_ADJUSTMENT_FACTOR = 1.12
@@ -22,10 +20,7 @@ DEFAULT_AMBIENT_TEMP = 22
 DEFAULT_REFERENCE_TEMP = 21
 
 
-
 class Dough:
-    """
-    """
     def __init__(self, recipe):
         self.recipe = recipe
 
@@ -53,17 +48,16 @@ class Dough:
         else:
             return f"{hydration} - Very wet... Get a wetsuit on before tackling this dough."
 
-
     def calculate_water_temperature(self, target_temp=DEFAULT_DDT, flour_temp=DEFAULT_FLOUR_TEMP, levain_temp=DEFAULT_LEVAIN_TEMP, ambient_temp=DEFAULT_AMBIENT_TEMP, friction_factor=0, celsius=True):
         """ Calculate water temperature for target dough temp.
 
         Args:
-            ddt: Desired dough temperature. Default 25°C.
-            flour_temp: Flour temperature. Default 22°C.
-            levain_temp: Levain/starter temperature. Default 25°C.
-            ambient_temp: Room temperature. Default 22°C.
-            friction_factor: Heat from mixing (0 for hand, 10-30°F for machine). Default 0.
-            celsius: Use Celsius if True, Fahrenheit if False. Default True.
+            target_temp: Desired dough temperature in °C. Default 25.
+            flour_temp: Flour temperature in °C. Default 22.
+            levain_temp: Levain/starter temperature in °C. Default 22.
+            ambient_temp: Room temperature in °C. Default 22.
+            friction_factor: Heat from mixing (0 for hand, 10-30 for machine). Default 0.
+            celsius: Return in Celsius if True, Fahrenheit if False. Default True.
 
         Returns:
             Dict {"water_temp": float, "unit": str}
@@ -73,11 +67,10 @@ class Dough:
             flour_temp = utils.celsius_to_fahrenheit(flour_temp)
             levain_temp = utils.celsius_to_fahrenheit(levain_temp)
             ambient_temp = utils.celsius_to_fahrenheit(ambient_temp)
-            # friction_fact = utils.celsius_to_fahrenheit(friction_fact) -- has to stay 0 when no friction is applied.
 
         water_temp = round((target_temp * WATER_TEMP_MULTIPLIER) - (flour_temp + levain_temp + ambient_temp + friction_factor), 1)
 
-        if 15 < water_temp > 48:
+        if water_temp < 15 or water_temp > 48:
             raise ValueError("That temperature would either freeze or boil your dough. Let's keep it real!\n")
 
         return {
@@ -89,12 +82,12 @@ class Dough:
         reference_temp: float=DEFAULT_REFERENCE_TEMP,
         ambient_temp: float=DEFAULT_AMBIENT_TEMP):
         """Adjusts fermentation time based on room temperature.
-        
+
         Args:
-            base_time_hours: Fermentation time at reference temp, in hours.
+            base_hours: Fermentation time at reference temp, in hours.
             reference_temp: Recipe's designed temperature in Celsius. Default 21°C.
             ambient_temp: Actual room temperature in Celsius. Default 22°C.
-        
+
         Returns:
             dict: Original and adjusted times, temperatures.
         """
@@ -104,7 +97,6 @@ class Dough:
         temp_difference = reference_temp - ambient_temp
         # For every 1°C change, fermentation time changes by ~10-15%
         adjustment_factor = FERMENTATION_ADJUSTMENT_FACTOR ** temp_difference
-        # TODO: adjustment_factor for °F.
         adjusted_time_hours = base_hours * adjustment_factor
 
         return {
@@ -113,30 +105,3 @@ class Dough:
             "reference_temp": reference_temp,
             "ambient_temp": ambient_temp
         }
-
-    def schedule_autolyse(self, duration_minutes=30):
-        """Calculates autolyse rest period start and end times.
-    
-        Args:
-            duration_minutes: Rest duration in minutes. Default 30.
-        
-        Returns:
-            dict: Start time, end time, and duration.
-        """
-        start_time = datetime.now()
-        end_time = start_time + timedelta(minutes=duration_minutes)
-
-        return {
-            "start": start_time.strftime("%H:%M"),
-            "end": end_time.strftime("%H:%M"),
-            "duration": duration_minutes
-        }
-
-# recipe = Recipe.from_bakers_percentage("Test", 1000, {"water": 0.70, "salt": 0.02})
-# dough = Dough(recipe)
-# print(dough)
-
-# print(dough.hydration) 
-# print(dough.hydration_description) 
-# print(dough.hydration_description)  
-# print(dough.calculate_water_temperature(target_temp=25))

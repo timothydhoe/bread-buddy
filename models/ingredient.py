@@ -1,6 +1,6 @@
 """
 filename: ingredient.py
-------------------------
+-----------------------
 
 This file contains the Ingredient class for bread recipes.
 
@@ -87,7 +87,7 @@ class Ingredient:
     def weight(self):
         """Get ingredient weight in grams."""
         return self._weight
-
+        
     @weight.setter
     def weight(self, value):
         """Set weight with validation."""
@@ -169,8 +169,10 @@ class Ingredient:
             data.get("starter_hydration", 100)
         )
 
-
-
-## TEST ##
-# rye = Ingredient('rye', 500, "flour")
-# print(rye)
+    def to_chart_dict(self) -> dict:
+        """Return minimal dict for chart rendering in templates."""
+        return {
+            "label": self.name.capitalize(),
+            "value": round(self.weight, 1),
+            "cat": self.category,
+        }

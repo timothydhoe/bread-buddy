@@ -1,0 +1,26 @@
+{% if error %}
+<div class="result result--error">{{ error }}</div>
+
+{% elif result %}
+<div class="result result--success">
+    <div class="result-main">To make your starter feed:</div>
+    <ul class="feed-list">
+        <li>
+            <span class="feed-label">Old starter</span>
+            <span class="feed-weight">{{ result.starter_weight | round(0) | int }}g</span>
+        </li>
+        <li>
+            <span class="feed-label">Flour</span>
+            <span class="feed-weight">{{ result.flour_weight | round(0) | int }}g</span>
+        </li>
+        <li>
+            <span class="feed-label">Water</span>
+            <span class="feed-weight">{{ result.water_weight | round(0) | int }}g</span>
+        </li>
+        <li class="feed-total">
+            <span class="feed-label">Total</span>
+            <span class="feed-weight">{{ (result.starter_weight + result.flour_weight + result.water_weight) | round(0) | int }}g</span>
+        </li>
+    </ul>
+</div>
+{% endif %}

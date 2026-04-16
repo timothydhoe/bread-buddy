@@ -2,14 +2,12 @@
 filename: levain.py
 -------------------
 
-This file contains the Levain class. This is basically a Recipe so the Levain Class is a Subclass from Recipe. 
+This file contains the Levain class. This is basically a Recipe so the Levain Class is a Subclass from Recipe.
 
 params:
     ingredients: [Ingredient] -- default=None
 
 """
-
-#TODO: method to add ingredients like sugar!!
 
 from .ingredient import Ingredient
 from .recipe import Recipe
@@ -69,7 +67,6 @@ class Levain(Recipe):
         self.feeding_ratio = (flour, water, starter)
         return self
 
-#TODO: method to add ingredients like sugar!!
     def create_feeding_recipe(self, target_amount=220):
         """ Create a feeding recipe """
         amount = self.calculate_feeding(target_amount)
@@ -86,9 +83,3 @@ class Levain(Recipe):
         )
         
         return feeding_recipe
-        
-
-# starter = Levain("My Starter")
-# print(starter.calculate_feeding(220))
-# feeding_recipe = starter.create_feeding_recipe(220)
-# print(feeding_recipe)

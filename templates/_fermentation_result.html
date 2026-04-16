@@ -1,0 +1,20 @@
+{% if error %}
+<div class="result result--error">{{ error }}</div>
+
+{% elif result %}
+<div class="result result--success">
+    <div class="result-main">
+        Adjusted bulk time: <strong>{{ result.adjusted_time }}</strong>
+    </div>
+    <p class="result-note">
+        Based on {{ result.base_time }} at {{ result.reference_temp }}°C, adjusted to {{ result.ambient_temp }}°C.
+        {% if result.ambient_temp > result.reference_temp %}
+        Your room is warmer than the recipe assumes, so fermentation will move faster. Keep an eye on it.
+        {% elif result.ambient_temp < result.reference_temp %}
+        Your room is cooler, so fermentation will be slower. Be patient and trust the process.
+        {% else %}
+        Your room temperature matches the recipe perfectly. Nice.
+        {% endif %}
+    </p>
+</div>
+{% endif %}

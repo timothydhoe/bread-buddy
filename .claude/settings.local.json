@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source .venv/bin/activate)",
+      "Bash(curl -s -X POST http://127.0.0.1:5000/calculate/water-temp -d \"target_dough_temp=25&ambient_temp=20&flour_temp=20&levain_temp=22&friction_factor=0&temp_unit=C\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:5000/static/manifest.json)",
+      "Bash(curl -s -o /dev/null -w \" %{http_code}\" http://127.0.0.1:5000/static/sw.js)",
+      "Bash(curl -s -o /dev/null -w \" %{http_code}\" http://127.0.0.1:5000/static/icons/icon-192.png)",
+      "Bash(curl -s http://127.0.0.1:5000/)",
+      "Bash(python3:*)",
+      "WebFetch(domain:127.0.0.1)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "context7",
+    "playwright"
+  ]
+}

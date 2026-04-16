@@ -1,0 +1,196 @@
+{% if recipe and recipe.ingredients %}
+<div class="sidebar-header">
+    <h2 class="sidebar-title">Your Recipe</h2>
+</div>
+
+{# Expose starter weight so the starter calculator can pre-fill it #}
+{% for ing in recipe.ingredients if ing.category == 'starter' %}
+<span id="recipe-starter-weight" data-weight="{{ ing.weight | round(0) | int }}" hidden></span>
+{% endfor %}
+
+{# Composition bar — pure CSS, always renders, no JS timing issues #}
+{% set total_w = recipe.total_weight %}
+{% if total_w > 0 %}
+<div class="comp-bar">
+    {% for ing in recipe.ingredients %}
+    {% set seg_pct = (ing.weight / total_w * 100) | round(1) %}
+    <div class="comp-seg comp-seg--{{ ing.category }}"
+         style="width: {{ seg_pct }}%"
+         title="{{ ing.name | capitalize }}: {{ ing.weight | round(0) | int }}g ({{ seg_pct }}% of dough)"></div>
+    {% endfor %}
+</div>
+<div class="comp-legend">
+    {% for ing in recipe.ingredients %}
+    {% set seg_pct = (ing.weight / total_w * 100) | round(1) %}
+    <div class="comp-legend-item">
+        <span class="comp-dot comp-dot--{{ ing.category }}"></span>
+        <span class="comp-name">{{ ing.name | capitalize }}</span>
+        <span class="comp-val">{{ ing.weight | round(0) | int }}g</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% set flour_ings = recipe.ingredients | selectattr('category', 'equalto', 'flour') | list %}
+{% set standard_ings = recipe.ingredients | rejectattr('category', 'equalto', 'flour') | rejectattr('category', 'equalto', 'other') | list %}
+{% set custom_other_ings = recipe.ingredients | selectattr('category', 'equalto', 'other') | list %}
+
+<ul class="ingredient-breakdown">
+    {% if flour_ings | length > 1 %}
+    {# Flour blend: show a header row then each flour sub-row #}
+    <li class="breakdown-row">
+        <span class="breakdown-name">
+            Flour blend
+            <span class="breakdown-cat tag tag--flour">flour</span>
+        </span>
+        <span class="breakdown-weight">{{ recipe.total_flour_weight | round(0) | int }}g</span>
+        <span class="breakdown-pct">100%</span>
+    </li>
+    {% for ing in flour_ings %}
+    <li class="breakdown-row" style="padding-left:18px; font-size:0.85em; opacity:0.85">
+        <span class="breakdown-name">↳ {{ ing.name }}</span>
+        <span class="breakdown-weight">{{ ing.weight | round(0) | int }}g</span>
+        <span class="breakdown-pct">{{ ((ing.weight / recipe.total_flour_weight) * 100) | round(0) | int }}%</span>
+    </li>
+    {% endfor %}
+    {% else %}
+    {% for ing in flour_ings %}
+    <li class="breakdown-row">
+        <span class="breakdown-name">
+            {{ ing.name | capitalize }}
+            <span class="breakdown-cat tag tag--flour">flour</span>
+        </span>
+        <span class="breakdown-weight">{{ ing.weight | round(0) | int }}g</span>
+        <span class="breakdown-pct">100%</span>
+    </li>
+    {% endfor %}
+    {% endif %}
+
+    {% for ing in standard_ings %}
+    <li class="breakdown-row">
+        <span class="breakdown-name">
+            {{ ing.name | capitalize }}
+            <span class="breakdown-cat tag tag--{{ ing.category }}">{{ ing.category }}</span>
+        </span>
+        <span class="breakdown-weight">{{ ing.weight | round(0) | int }}g</span>
+        <span class="breakdown-pct">
+            {% if recipe.total_flour_weight > 0 %}
+                {{ ((ing.weight / recipe.total_flour_weight) * 100) | round(1) }}%
+            {% endif %}
+        </span>
+    </li>
+    {% endfor %}
+
+    {% if custom_other_ings | length > 0 %}
+    {# Custom other ingredients: header row + sub-rows #}
+    {% set other_total = namespace(w=0) %}
+    {% for ing in custom_other_ings %}{% set other_total.w = other_total.w + ing.weight %}{% endfor %}
+    <li class="breakdown-row">
+        <span class="breakdown-name">
+            Other
+            <span class="breakdown-cat tag tag--other">other</span>
+        </span>
+        <span class="breakdown-weight">{{ other_total.w | round(0) | int }}g</span>
+        <span class="breakdown-pct">
+            {% if recipe.total_flour_weight > 0 %}
+                {{ ((other_total.w / recipe.total_flour_weight) * 100) | round(1) }}%
+            {% endif %}
+        </span>
+    </li>
+    {% for ing in custom_other_ings %}
+    <li class="breakdown-row" style="padding-left:18px; font-size:0.85em; opacity:0.85">
+        <span class="breakdown-name">↳ {{ ing.name }}</span>
+        <span class="breakdown-weight">{{ ing.weight | round(0) | int }}g</span>
+        <span class="breakdown-pct">
+            {% if recipe.total_flour_weight > 0 %}
+                {{ ((ing.weight / recipe.total_flour_weight) * 100) | round(1) }}%
+            {% endif %}
+        </span>
+    </li>
+    {% endfor %}
+    {% endif %}
+</ul>
+
+<div class="sidebar-divider"></div>
+
+<dl class="stat-list">
+    <div class="stat-row">
+        <dt>Total flour</dt>
+        <dd>{{ recipe.total_flour_weight | round(0) | int }}g</dd>
+    </div>
+    <div class="stat-row">
+        <dt>Water (incl. starter)</dt>
+        <dd>{{ recipe.total_liquid_weight | round(0) | int }}g</dd>
+    </div>
+    <div class="stat-row stat-row--highlight">
+        <dt>Total dough</dt>
+        <dd>{{ recipe.total_weight | round(0) | int }}g</dd>
+    </div>
+    <div class="stat-row stat-row--clickable" onclick="scrollToHydration()" title="Click to adjust">
+        <dt>Hydration</dt>
+        {% set eff_hyd = recipe.hydration_percentage | float %}
+        {% if input_hydration is defined and (eff_hyd - input_hydration) | abs > 0.4 %}
+        <dd>
+            {{ input_hydration | round(0) | int }}% set
+            <span class="stat-secondary">· {{ eff_hyd | round(0) | int }}% actual
+                <button type="button" class="info-trigger" onclick="event.stopPropagation(); showTip(this,'hydration-effective')">ⓘ</button>
+            </span>
+        </dd>
+        {% else %}
+        <dd>{{ eff_hyd | round(0) | int }}%</dd>
+        {% endif %}
+    </div>
+</dl>
+
+{# Hydration spectrum meter — pure CSS, pin positioned by inline style #}
+{% set hyd = recipe.hydration_percentage | float %}
+{% set pin_raw = (hyd - 55) / 45 * 100 %}
+{% set pin_pct = pin_raw if pin_raw > 0 else 0 %}
+{% set pin_pct = pin_pct if pin_pct < 100 else 100 %}
+<div class="hydration-meter">
+    <div class="hydration-bar"></div>
+    <div class="hydration-pin" style="left: calc({{ pin_pct | round(1) }}% - 6px)"></div>
+    <div class="hydration-zones">
+        <span>Stiff</span>
+        <span>Standard</span>
+        <span>Open</span>
+        <span>Wet</span>
+    </div>
+</div>
+
+<a href="/science#acids" class="science-link">Why does hydration change your crumb? The science explains.</a>
+
+<div class="sidebar-actions-row">
+    <button type="button" class="btn btn-outline btn-small" onclick="shareRecipe()">
+        Share link
+    </button>
+</div>
+
+<div class="sidebar-divider"></div>
+
+{# Smart hints #}
+{% if hints %}
+<div class="hints-list">
+    {% for hint in hints %}
+    <div class="hint-chip hint-chip--{{ hint.level }}">
+        <span class="hint-icon">{% if hint.level == 'warn' %}⚠️{% else %}💡{% endif %}</span>
+        <span>{{ hint.text }}</span>
+        <button class="hint-dismiss" onclick="this.closest('.hint-chip').remove()" aria-label="Dismiss">✕</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<a href="#section-timeline" class="btn btn-primary btn-full">
+    Generate Bake Plan →
+</a>
+
+{% elif error %}
+<div class="sidebar-error">{{ error }}</div>
+
+{% else %}
+<div class="sidebar-empty">
+    <div class="sidebar-empty-icon">🌾</div>
+    <p>Fill in your recipe details to see the breakdown here.</p>
+</div>
+{% endif %}

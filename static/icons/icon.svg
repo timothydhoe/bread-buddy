@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#f6f2ec"/>
+  <!-- Loaf body -->
+  <ellipse cx="256" cy="300" rx="180" ry="90" fill="#b5673c"/>
+  <!-- Dome / top crust -->
+  <ellipse cx="256" cy="220" rx="165" ry="95" fill="#c8773f"/>
+  <!-- Score line -->
+  <path d="M190 190 Q256 155 322 190" stroke="#8b4a22" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Steam dots -->
+  <circle cx="200" cy="130" r="12" fill="#5c4535" opacity="0.25"/>
+  <circle cx="256" cy="110" r="14" fill="#5c4535" opacity="0.22"/>
+  <circle cx="312" cy="130" r="12" fill="#5c4535" opacity="0.25"/>
+</svg>

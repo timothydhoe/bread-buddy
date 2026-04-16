@@ -1,132 +1,132 @@
-# Bread Buddy
+# bread buddy
 
-*Bake by Numbers*
+A sourdough calculator and bake planner for home bakers. Runs in the browser, installs as a PWA on iPhone and iPad, works offline.
 
-A calculator app that helps bakers
+## What it does
 
-## TODOs
+- **Recipe builder** — flour weight + baker's percentages for water, starter, and salt. Supports flour blends. Live ingredient breakdown in the sidebar.
+- **Bake timeline** — enter when you want fresh bread; get a backwards-planned schedule from starter feeding to first slice, with "what to look for" cues at each step.
+- **Step reminders** — browser notifications, 2 minutes before each timeline step. Works in the background when installed as a PWA.
+- **Water temperature calculator** — DDT formula accounts for room temp, flour temp, starter temp, and friction factor.
+- **Bulk fermentation adjuster** — adjusts time for your actual room temperature vs. the recipe's reference temp.
+- **Starter feeding calculator** — target amount + feeding ratio → old starter, flour, water weights.
+- **Bake log** — tap your outcome (Great / Good / OK / Disappointing), add an optional note. Stored locally.
+- **The Science** and **Troubleshooting** reference pages.
 
-essentials and must-haves:
+## Running the app
 
-~~**Baker's percentage calculator** - the bread baker's holy grail. Input flour weight, get all other ingredients as percentages or vice versa~~
-
-~~**Hydration calculator** - water/flour ratio, shows if dough will be sticky/stiff~~
-
-~~**Desired dough weight** → ingredients - "I want 800g of dough" → breaks down flour, water, salt, yeast~~
-
-~~**Recipe scaler** - scale any recipe up/down by portions or total weight~~
-
-~~**Water temperature calculator** - factors in flour temp, room temp, friction factor to hit target dough temp~~
-
-~~**Autolyse timer** - just a simple reminder, but bakers forget~~
-
-~~**Bulk fermentation time adjuster** - warmer room = shorter time~~
-
-~~**Sourdough feeding calculator** - starter ratios~~
-
-Nice-to-haves:
-
-**Process time calculator** -- When to start if you want to finish by a certain time
-                            --> need full recipe for that?
-
-**Pre-fermented Flour percentage** -- pp.130-131
-
-**Levain percentage** -- pp.130-131
-
-**Flour substitution ratios** - swapping T60 wheat for T150 wheat? Or swapping Rye for Spelt? (affects hydration)
-
-**Oven spring estimator** - how much will dough rise in oven? Can this be calculated?
-
-**Unit conversions** - cups to grams? Necessary? --> maybe not, use grams only? 🤔
-
-
-## Refactoring:
-
-**Check variable names** --> are they meaningful? Clear?
-
-**check keyword arguments consistency** --> Same words/patterns across functions
-
-~~⚠️ **Add docstrings to all functions** --> complete and consistency. I'm going to forget what functions do!~~
-
-~~⚠️ **Add input validation** --> negative temps? flour = 0? Check edge cases~~
-
-**Extract magic numbers to constants** --> like the 1.12 factor in fermentation, friction factors, etc. Put them at top of file
-
-**Add a constants.py file?** --> for default temps, common ratios, friction factors ? too much, though??
-
-~~⚠️ **Consistent return types** --> some functions return dicts, some tuples, some strings. Pick one pattern? Which one would suit the app better? ALL SHOULD RETURN DICT.~~
-
-~~**Add type hints** --> `def bakers_percentage(flour_weight: int, percentages: dict) -->> dict:` Good idea! 💡~~
-
-~~⚠️ **Error handling in calculators** --> How to deal with bad/wrong data(types) in your functions?~~
-
-At the end:
-
-**Remove debug print statements** --> in main.py
-
-**DRY principle** --> repeating any logic that could be a helper function?
-
-**Error handling** --> check for crashes, make them failures.
-                   --> adding exit codes?
-
-**Unit tests** --> test calculations (pytest!)
-
-## App Name ideas
-
-**Bread Mate**
-**Baker's Mate**
-**Baker's Buddy**
-**Bread Buddy**
-
-**Baker's Compass**
-**Dough Math**
-**The Crumb Calculator**
-**Levain Logic**
-**The Baker's Atlas**
-**Dough Decoder**
-**Baker's Metric**
-
-## Comments and Docstrings
-
-I'm using [Google's docstring style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
-
-All ratios in the ap
-
-## Baker's percentage *aka baker's math*
-
-The baker's percentage is a bit different from how mathematicians would look at percentages.
-
-The key part to understand about using baker's percentages is that all the flour used in a formula will always add up to 100%.
-The flour is the main ingredient to which all other ingredients are compared, and the other ingredients are expressed as a percentage of the total flour weight.
-
-## Ratios and weights
-
-All ratios in the app are programmed as 1 for 100%. This makes it easier to do the math.
 ```bash
-.2 = 20%
-.02 = 2%
+# Activate the virtual environment first
+source .venv/bin/activate
 
-.5 = 50%
-.05 = 5%
-
-1 = 100%
-1.02 = 102%
-1.2 = 120%
+# Run the Flask development server
+python app.py
 ```
 
-All weights are in grams. Yes, even liquids. This makes it accurate to measure and makes a recipe repeatable.
+The app runs at `http://127.0.0.1:5000` in debug mode.
 
-## Terminology
+If you get "Address already in use":
+```bash
+lsof -ti :5000 | xargs kill -9
+```
 
-I will assume that not every programmer is a baker. So, here's a list that you can reference if some jargon ever leaves you baffled.
-I will do my utmost best to keep this list both updated and alphabetical. Yet, I won't make any promises that this is list will be up-to-date at all times.
+## Running tests
 
-**Inoculation**
-: *Ripe Sourdough Carryover*
+```bash
+pytest                              # all tests
+pytest tests/test_foo.py            # single file
+pytest tests/test_foo.py::test_bar  # single test
+```
 
+Tests are a planned TODO — none exist yet.
+
+## Architecture
+
+Single-page Flask app (`app.py`) with **no server-side state**. The Flask server is stateless — every request carries all the data it needs. Recipe state lives entirely in the client (`localStorage`). All bread calculation logic lives in the `models/` package; `app.py` handles only form parsing and rendering.
+
+### State management
+
+- **`localStorage['bb_last_state']`** — the current recipe form state, auto-saved after every sidebar recalculation. Restored on page load, so refresh never wipes your work.
+- **`localStorage['bb_recipe_<name>']`** — named saved recipes (form-state format).
+- **`localStorage['bb_bake_<iso-date>']`** — bake log entries.
+- **`localStorage['bb_reminders']`** — scheduled step notification times.
+- **`sessionStorage['bb_step_N']`** — timeline step checkbox state (checked/unchecked).
+
+### Model hierarchy
+
+- `Ingredient` — base unit: name, weight (grams), category, baker's percentage ratio, starter hydration
+- `Recipe` — container of `Ingredient` objects; computes `total_flour_weight`, `total_liquid_weight`, `hydration_percentage`
+- `Levain(Recipe)` — subclass for sourdough starters; adds feeding ratio tuple `(flour, water, starter)` and `calculate_feeding(target_amount)`
+- `Dough(Recipe)` — wraps a recipe; adds `calculate_water_temperature()` and `calculate_fermentation_time()` (both stateless — don't read `self.recipe`)
+- `BakeTimeline` — generates a list of `BakeStep` objects working backwards from a target datetime
+
+`utils.py` — temperature conversions, time formatting, percentage helpers.
+
+### Key domain conventions
+
+- **All ratios are decimal fractions**: `0.70` = 70%, `0.02` = 2%.
+- **All weights are in grams**, including liquids.
+- **Baker's percentage**: flour is always 100%; all other ingredients are expressed relative to total flour weight.
+- **Hydration calculation for starters**: `liquid_part = starter_weight × (hydration / (1 + hydration))`
+- **Temperatures**: all internal calculations use Celsius. `utils.celsius_to_fahrenheit()` is available for display.
+- **Ingredient categories**: `{"flour", "water", "salt", "starter", "fat", "sweetener", "other"}` — validated on construction.
+
+### HTMX flow
+
+Every form posts to a `/calculate/*` endpoint via HTMX and gets back an HTML partial. The endpoints are fully stateless — they read all inputs from the POST body and return rendered HTML. No Flask session is used.
+
+The timeline form uses `hx-include="#bread-type-input, #starter-pct"` to pull those fields from the recipe form into the timeline POST.
+
+### PWA
+
+- `static/manifest.json` — app name, icons, theme colour, `display: standalone`
+- `static/sw.js` — service worker: cache-first for static assets, network-first for `/calculate/*` endpoints, offline fallback for navigation
+- `static/icons/` — 192px, 512px, and 180px (Apple touch) PNG icons
+
+Install via Safari → Share → Add to Home Screen. Opens full-screen, works offline.
+
+## Tech stack
+
+| Layer | Choice |
+|---|---|
+| Backend | Flask (Python) |
+| Templating | Jinja2 |
+| Reactivity | HTMX 1.9 |
+| Styling | Vanilla CSS (design tokens, ~2800 lines) |
+| JS | Vanilla JS (~1200 lines, no framework) |
+| State | localStorage + sessionStorage |
+| Offline | Service Worker (Cache API) |
+
+## Project structure
+
+```
+app.py                    Flask routes (stateless)
+models/
+  ingredient.py           Ingredient model
+  recipe.py               Recipe model
+  levain.py               Levain (starter) model
+  dough.py                Dough model (DDT, fermentation calculations)
+  timeline.py             BakeTimeline + BakeStep
+  utils.py                Temperature conversions, time formatting
+static/
+  main.js                 All client-side logic
+  style.css               Design system + component styles
+  manifest.json           PWA manifest
+  sw.js                   Service worker
+  icons/                  App icons (192, 512, 180px PNG + source SVG)
+templates/
+  base.html               Layout shell, header, sidebar, PWA meta
+  index.html              Main calculator page
+  science.html            Fermentation science reference
+  troubleshoot.html       Problem-solving guide
+  bakes.html              Bake log page
+  _recipe_summary.html    Sidebar partial (injected by HTMX)
+  _bake_timeline.html     Timeline partial (injected by HTMX)
+  _starter_result.html    Starter feeding result partial
+  _water_temp_result.html Water temperature result partial
+  _fermentation_result.html Fermentation time result partial
+```
 
 ## Resources
 
-As an amateur baker, I like good resources on bread baking. So, I'll be listing all resources I'm using here. Most will be books, as I prefer that medium when baking bread and researching topics.
-
-> Leo M. (2022), *The perfect Loaf, The Craft and Science of Sourdough Breads, Sweets, and More*. Clarkson Potter Publishers
+> Leo M. (2022), *The Perfect Loaf: The Craft and Science of Sourdough Breads, Sweets, and More*. Clarkson Potter.

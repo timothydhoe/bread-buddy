@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bread buddy — sourdough calculator</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#b5673c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="bread buddy">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous" defer></script>
+
+    <!-- Register service worker -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/static/sw.js', { scope: '/' })
+                .catch(() => {});   // silent fail — app works fine without SW
+        });
+    }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo">🍞 bread buddy</a>
+            <nav class="header-nav">
+                <a href="/" class="header-nav-link">Calculator</a>
+                <a href="/science" class="header-nav-link">The Science</a>
+                <a href="/troubleshoot" class="header-nav-link">Help</a>
+                <a href="/bakes" class="header-nav-link">Bake Log</a>
+            </nav>
+            <div class="header-actions">
+                <div class="recipe-panel-wrap" id="recipe-panel-wrap">
+                    <button class="btn-recipes" id="recipe-panel-toggle"
+                            onclick="toggleRecipePanel()" aria-haspopup="true" aria-expanded="false">
+                        My recipes
+                    </button>
+                    <div class="recipe-panel" id="recipe-panel" hidden>
+                        <div class="recipe-panel-list" id="recipe-panel-list">
+                            <!-- populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="progress-nav" id="progress-nav" aria-label="Bake steps">
+        <a class="progress-step" href="#section-recipe" data-section="section-recipe">Recipe</a>
+        <span class="progress-sep"></span>
+        <a class="progress-step" href="#section-starter" data-section="section-starter">Starter</a>
+        <span class="progress-sep"></span>
+        <a class="progress-step" href="#section-params" data-section="section-params">Conditions</a>
+        <span class="progress-sep"></span>
+        <a class="progress-step" href="#section-timeline" data-section="section-timeline">Bake Plan</a>
+    </nav>
+
+    <div class="app-layout{% if hide_sidebar %} app-layout--full{% endif %}">
+        <main class="main-panel">
+            {% block content %}{% endblock %}
+        </main>
+
+        {% if not hide_sidebar %}
+        <aside class="sidebar" id="sidebar-panel">
+            <div class="sidebar-inner">
+                <div id="recipe-sidebar">
+                    {% block sidebar %}{% endblock %}
+                </div>
+                <div id="sidebar-spinner" class="htmx-indicator sidebar-spinner">Recalculating…</div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="recipe-name-row">
+                    <label for="recipe-name-input" class="recipe-name-label">Recipe name</label>
+                    <input type="text" id="recipe-name-input" class="recipe-name-input"
+                           value="My Sourdough" placeholder="Name your recipe" maxlength="60">
+                </div>
+                <div class="recipe-name-row" style="margin-top:2px">
+                    <label for="recipe-notes-input" class="recipe-name-label">Notes</label>
+                    <textarea id="recipe-notes-input" class="recipe-notes-input"
+                              placeholder="How did it go? What would you change?" maxlength="400" rows="3"></textarea>
+                </div>
+                <button class="btn btn-primary btn-full" onclick="saveRecipe()">Save this recipe</button>
+            </div>
+        </aside>
+        <!-- Mobile recipe FAB — only visible on small screens via CSS -->
+        <button class="recipe-fab" id="recipe-fab" onclick="toggleSidebarSheet()" aria-label="View recipe summary">
+            <span class="recipe-fab-label">Your Recipe</span>
+            <span class="recipe-fab-hydration" id="fab-hydration"></span>
+        </button>
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebarSheet()"></div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

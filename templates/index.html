@@ -1,142 +1,588 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bread Buddy</title>
-        <link rel="stylesheet" href="static/style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+{% extends "base.html" %}
 
-    </head>
-    <body>
-        <header>
-            <h1>Bread Buddy</h1>
-            <p>Bake by numbers</p>
-        </header>
+{% block content %}
 
-        <main>
-            <div class="calculator-container">
-                <h3>Main Recipe Settings</h3>
-                <p class="info-text">Tweak all ingredients to your recipe.</p>
-                <form action="" method="POST">
-                    <div class="form-group">
-                        <label for="flour_weight">Flour weight (grams):</label>
-                        <input type="number" id="flour_weight" name="flour_weight"
-                            value="1000" required min ="1" step = "1">
+<!-- ① RECIPE BUILDER ─────────────────────────────────────────────── -->
+<section class="card" id="section-recipe">
+    <p class="section-eyebrow">Step 1</p>
+    <h2 class="section-title">Recipe</h2>
+
+    <!-- Bread type selector — inline at top of recipe card -->
+    <div class="bread-type-bar">
+        <label class="mode-pill mode-pill--compact">
+            <input type="radio" name="bread_type_radio" value="flatbread"
+                   {% if bread_type == 'flatbread' %}checked{% endif %}
+                   onchange="applyBreadType('flatbread', 80, 10)">
+            🫓 Flatbread
+        </label>
+        <label class="mode-pill mode-pill--compact">
+            <input type="radio" name="bread_type_radio" value="loaf_pan"
+                   {% if bread_type == 'loaf_pan' %}checked{% endif %}
+                   onchange="applyBreadType('loaf_pan', 75, 10)">
+            🍞 Loaf Pan
+        </label>
+        <label class="mode-pill mode-pill--compact">
+            <input type="radio" name="bread_type_radio" value="freestanding"
+                   {% if bread_type == 'freestanding' %}checked{% endif %}
+                   onchange="applyBreadType('freestanding', 70, 10)">
+            🥖 Artisan Boule
+        </label>
+        <label class="mode-pill mode-pill--compact">
+            <input type="radio" name="bread_type_radio" value="starter_only"
+                   {% if bread_type == 'starter_only' %}checked{% endif %}
+                   onchange="applyBreadType('starter_only', 70, 10)">
+            🌱 Starter Only
+        </label>
+    </div>
+    <p class="bread-type-note" id="bread-type-note">
+        {% if bread_type == 'flatbread' %}Same-day bake · skillet or griddle · 80% hydration
+        {% elif bread_type == 'loaf_pan' %}Pan-baked · forgiving to shape · 75% hydration
+        {% elif bread_type == 'starter_only' %}Feeding calculator only. No bread recipe.
+        {% else %}Dutch oven · free-form artisan · 70% hydration{% endif %}
+    </p>
+
+    <div id="recipe-form-wrap">
+
+    <div class="recipe-templates">
+        <span class="recipe-templates-label">Start from a template:</span>
+        <button type="button" class="template-pill" onclick="loadTemplate('country')">Classic Country Loaf</button>
+        <button type="button" class="template-pill" onclick="loadTemplate('highHydration')">High-Hydration Batard</button>
+        <button type="button" class="template-pill" onclick="loadTemplate('rye')">Rye Sandwich</button>
+        <button type="button" class="template-pill" onclick="loadTemplate('flatbread')">Quick Flatbread</button>
+    </div>
+
+    <p class="section-intro" style="margin-top:16px">
+        Enter your flour weight. Everything else is a <em>baker's percentage</em>
+        <button type="button" class="info-trigger" onclick="showTip(this,'bakers-pct')">ⓘ</button>
+        relative to flour. Tap the <strong>%</strong> or <strong>g</strong> badge next to starter and salt to switch units.
+    </p>
+
+    <form id="recipe-form"
+          hx-post="/calculate/recipe"
+          hx-target="#recipe-sidebar"
+          hx-trigger="change, keyup delay:300ms from:input[type=number]"
+          hx-swap="innerHTML"
+          hx-indicator="#sidebar-spinner">
+
+        <input type="hidden" id="bread-type-input" name="bread_type" value="{{ bread_type }}">
+
+        <div class="form-row">
+            <div class="form-field">
+                <label for="flour-weight">Flour weight</label>
+                <div class="input-with-unit">
+                    <input type="number" id="flour-weight" name="flour_weight"
+                           value="{{ flour_weight|int }}" min="50" max="10000" step="10"
+                           required aria-describedby="flour-hint"
+                           oninput="updateGramFields()">
+                    <span class="unit">g</span>
+                </div>
+                <small id="flour-hint" class="field-hint">Total flour weight. 500g makes one medium loaf. 750-800g makes a large one.</small>
+                <details class="flour-blend" id="flour-blend-panel">
+                    <summary>+ Use a flour blend</summary>
+                    <div class="flour-blend-inner">
+                        <div id="flour-rows"></div>
+                        <div class="flour-blend-actions">
+                            <button type="button" class="btn btn-outline btn-small" onclick="addFlourRow()">+ Add flour</button>
+                            <span class="flour-blend-total" id="flour-blend-total"></span>
+                        </div>
+                        <p class="field-hint">Individual weights replace the single flour weight above. Total auto-updates.</p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="water_ratio">Water (%):</label>
-                        <input type="number" id="water_ratio" name="water_ratio"
-                            value="70" required min="1" step="0.1">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="salt_ratio">Salt(%):</label>
-                        <input type="number" id="salt_ratio" name="salt_ratio"
-                            value="2" required min ="0" step="0.1">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="levain_ratio">Levain (%):</label>
-                        <input type="number" id="levain_ratio" name="levain_ratio" value="20" step="0.1">
-                    </div>
-
-                    <hr>
-                    <div class="additional-container">
-                        <h3>Additional Recipe Settings</h3>
-                        <p class="info-text">Adjust depending on the recipe, how much time you have or on the temperatures you're measuring.</p>
-
-                        <div class="form-group">
-                            <label for="scale_factor">Scale Recipe (multiplier):</label>
-                            <input type="range" id="scale_factor" name="scale_factor" 
-                                min="0.5" max="3" step="0.1" value="1">
-                            <span id="scale_display">1x</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="ambient_temp">Room Temperature (°C):</label>
-                            <input type="number" id="ambient_temp" name="ambient_temp" 
-                                value="22" step="0.5">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="ambient_temp">Room Temperature (°C):</label>
-                            <input type="number" id="ambient_temp" name="ambient_temp" 
-                                value="22" step="0.5" min="10" max="35">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="target_dough_temp">Target Dough Temperature (°C):</label>
-                            <input type="number" id="target_dough_temp" name="target_dough_temp" 
-                                value="25" step="0.5" min="18" max="30">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="base_fermentation">Base Fermentation Time (hours):</label>
-                            <input type="number" id="base_fermentation" name="base_fermentation" 
-                                value="4" step="0.5" min="1" max="24">
-                        </div>
-                    </div>
-
-                    <button type="submit">Calculate</button>
-
-                    {% if error %}
-                    <div class="error">
-                        <h3>Error:</h3>
-                        <p>{{ error }}</p>
-                    </div>
-                    {% endif%}
-
-                    {% if result %}
-                    <div class="results">
-                        <h2>Your Recipe:</h2>
-                        <table>
-                            <tr>
-                                <th>Ingredient</th>
-                                <th>Weight (g)</th>
-                            </tr>
-                            {% for ingredient, weight in result.items() %}
-                                {% if ingredient != 'total_weight' %}
-                                <tr>
-                                    <td>{{ ingredient.replace('_', ' ').title() }}</td>
-                                    <td>{{ weight }}</td>
-                                </tr>
-                                {% endif%}
-                            {% endfor %}
-                            <tr class="total">
-                                <td><strong>Total Dough Weight:</strong></td>
-                                <td><strong>{{ result.total_weight }} g</strong></td>
-                            </tr>
-                        </table>
-                        <div class="hydration-info">
-                            <h3>Hydration Level: {{ hydration_result.hydration }}%</h3>
-                            <p class="info-text">{{ hydration_result.description }}</p>
-                        </div>
-
-                        <div class="water-temp-info">
-                            <h3>💧 Water Temperature</h3>
-                            <p><strong>{{ water_temp_result.water_temp }}{{ water_temp_result.unit }}</strong></p>
-                            <p class="info-text">Use this water temperature to hit your target dough temp</p>
-                        </div>
-
-                        <div class="fermentation-info">
-                            <h3>⏰ Bulk Fermentation</h3>
-                            <p>Base time: <strong>{{ fermentation_result.base_time }}</strong></p>
-                            <p>Adjusted for {{ fermentation_result.ambient_temp }}°C room temperature: 
-                               <strong>{{ fermentation_result.adjusted_time }}</strong></p>
-                        </div>
-                    </div>
-                    {% endif %}
-                </form>
+                </details>
             </div>
-        </main>
-        <script>
-            // Scaling script
-            const slider = document.getElementById('scale_factor');
-            const display = document.getElementById('scale_display');
-            
-            slider.addEventListener('input', function() {
-                display.textContent = this.value + 'x';
-            });
-        </script>
-    </body>
-</html>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field form-field--wide">
+                <label for="hydration">
+                    Hydration
+                    <button type="button" class="info-trigger" onclick="showTip(this,'hydration')">ⓘ</button>
+                </label>
+                <div class="slider-group">
+                    <input type="range" id="hydration" name="hydration"
+                           min="55" max="100" step="1"
+                           value="{{ hydration|int }}"
+                           oninput="updateHydrationDisplay(this.value)">
+                    <div class="slider-readout">
+                        <span id="hydration-value" class="slider-number">{{ hydration|int }}%</span>
+                        <span id="hydration-grams" class="slider-grams">= {{ (flour_weight * hydration / 100)|round|int }}g water</span>
+                        <span id="hydration-label" class="slider-label"></span>
+                    </div>
+                </div>
+                <p id="hydration-desc" class="field-hint"></p>
+            </div>
+        </div>
+
+        <div class="form-row form-row--two">
+            <div class="form-field">
+                <label for="starter-pct-visible">
+                    Starter
+                    <button type="button" class="info-trigger" onclick="showTip(this,'starter-pct')">ⓘ</button>
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="starter-pct-visible"
+                           value="{{ starter_pct }}" min="1" max="30" step="0.5"
+                           oninput="syncPctFromVisible(this, document.getElementById('starter-pct'), document.querySelector('[data-visible-input=starter-pct-visible]'))">
+                    <input type="hidden" id="starter-pct" name="starter_pct" value="{{ starter_pct }}">
+                    <button type="button" class="unit unit-toggle"
+                            data-visible-input="starter-pct-visible"
+                            data-hidden-input="starter-pct"
+                            title="Tap to switch between % and grams"
+                            onclick="togglePctGrams(this, 'starter-pct-visible', 'starter-pct')">%</button>
+                </div>
+                <small class="field-hint">8–12% for most sourdoughs. Less = slower rise, more sour. More = milder, faster.</small>
+            </div>
+
+            <div class="form-field">
+                <label for="salt-pct-visible">Salt</label>
+                <div class="input-with-unit">
+                    <input type="number" id="salt-pct-visible"
+                           value="{{ salt_pct }}" min="0" max="5" step="0.1"
+                           oninput="syncPctFromVisible(this, document.getElementById('salt-pct'), document.querySelector('[data-visible-input=salt-pct-visible]'))">
+                    <input type="hidden" id="salt-pct" name="salt_pct" value="{{ salt_pct }}">
+                    <button type="button" class="unit unit-toggle"
+                            data-visible-input="salt-pct-visible"
+                            data-hidden-input="salt-pct"
+                            title="Tap to switch between % and grams"
+                            onclick="togglePctGrams(this, 'salt-pct-visible', 'salt-pct')">%</button>
+                </div>
+                <small class="field-hint">2% is standard — tightens gluten, slows fermentation, improves flavour.</small>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>Loaves</label>
+                <div class="loaf-selector">
+                    <label class="loaf-pill">
+                        <input type="radio" name="loaf_count" value="1" checked> 1 loaf
+                    </label>
+                    <label class="loaf-pill">
+                        <input type="radio" name="loaf_count" value="2"> 2 loaves
+                    </label>
+                    <label class="loaf-pill">
+                        <input type="radio" name="loaf_count" value="3"> 3 loaves
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field form-field--wide">
+                <details class="flour-blend" id="other-ing-panel">
+                    <summary>+ Add other ingredients</summary>
+                    <div class="flour-blend-inner">
+                        <div id="other-rows"></div>
+                        <div class="flour-blend-actions">
+                            <button type="button" class="btn btn-outline btn-small" onclick="addOtherRow()">+ Add ingredient</button>
+                        </div>
+                        <p class="field-hint">Oils, seeds, honey, eggs. Anything beyond flour, water, salt, and starter. Enter weight in grams or as a baker's percentage.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+    </form>
+    </div>{# /recipe-form-wrap #}
+</section>
+
+
+<!-- ② STARTER ────────────────────────────────────────────────────── -->
+<section class="card section-locked" id="section-starter">
+    <p class="section-eyebrow">Step 2</p>
+    <h2 class="section-title">Starter Feeding Calculator</h2>
+    <p class="section-intro">
+        How much starter do you need? Enter your target amount and feeding ratio.
+        A 1:5:5 ratio (starter : flour : water) is a reliable all-round choice.
+    </p>
+
+    <form hx-post="/calculate/starter"
+          hx-target="#starter-result"
+          hx-trigger="change, keyup delay:300ms from:input[type=number]"
+          hx-swap="innerHTML">
+
+        <div class="form-row form-row--two">
+            <div class="form-field">
+                <label for="target-amount">
+                    Target amount
+                    <button type="button" class="btn-link" onclick="useRecipeStarterWeight()" title="Fill from your recipe above">↑ from recipe</button>
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="target-amount" name="target_amount"
+                           value="110" min="10" max="2000" step="10">
+                    <span class="unit">g</span>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label>
+                    Feeding ratio
+                    <button type="button" class="info-trigger" onclick="showTip(this,'feeding-ratio')">ⓘ</button>
+                </label>
+                <div class="starter-presets">
+                    <button type="button" class="starter-preset-pill" onclick="applyStarterPreset(5,5,1)" title="100% hydration: all-purpose">Standard 1:5:5</button>
+                    <button type="button" class="starter-preset-pill" onclick="applyStarterPreset(5,2,1)" title="~40% hydration: good for bagels and stiff doughs">Stiff 1:5:2</button>
+                    <button type="button" class="starter-preset-pill" onclick="applyStarterPreset(3,3,1)" title="Faster and more active">Rye 1:3:3</button>
+                </div>
+                <div class="ratio-inputs">
+                    <div class="ratio-group">
+                        <input type="number" name="ratio_starter" value="1" min="0.1" step="0.1" class="ratio-input">
+                        <small>starter</small>
+                    </div>
+                    <span class="ratio-sep">:</span>
+                    <div class="ratio-group">
+                        <input type="number" name="ratio_flour" value="5" min="1" step="0.5" class="ratio-input">
+                        <small>flour</small>
+                    </div>
+                    <span class="ratio-sep">:</span>
+                    <div class="ratio-group">
+                        <input type="number" name="ratio_water" value="5" min="1" step="0.5" class="ratio-input">
+                        <small>water</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div id="starter-result">
+        {% include '_starter_result.html' %}
+    </div>
+
+    <details class="starter-ready-guide">
+        <summary>Is my starter ready to use?</summary>
+        <ul class="starter-ready-list">
+            <li>It has at least doubled in size since feeding</li>
+            <li>The surface is domed, not flat or starting to collapse</li>
+            <li>It smells tangy and yeasty, not sour or alcoholic</li>
+            <li>A small spoonful dropped in water floats (the classic float test)</li>
+            <li>You can see plenty of bubbles on the sides of the jar</li>
+        </ul>
+        <p class="starter-ready-note">Timing genuinely matters. Use your starter at or just after peak activity. Too early gives you a slow, reluctant rise. Too late gives you an over-fermented, flat loaf. Both are recoverable, but why make life harder?</p>
+    </details>
+</section>
+
+
+<!-- ④ BAKE PARAMETERS ────────────────────────────────────────────── -->
+<section class="card section-locked" id="section-params">
+    <p class="section-eyebrow">Step 3</p>
+    <div class="section-title-row">
+        <h2 class="section-title">Bake Parameters</h2>
+        <div class="temp-unit-toggle" role="group" aria-label="Temperature unit">
+            <button type="button" class="temp-toggle-pill active" data-unit="C" onclick="setTempUnit('C')">°C</button>
+            <button type="button" class="temp-toggle-pill" data-unit="F" onclick="setTempUnit('F')">°F</button>
+        </div>
+    </div>
+    <p class="section-intro">
+        The Desired Dough Temperature (DDT)
+        <button type="button" class="info-trigger" onclick="showTip(this,'ddt')">ⓘ</button>
+        formula ensures your dough ferments at a consistent speed regardless of your room, flour, or starter temperatures.
+        Enter all four temperatures and it tells you exactly how warm your mixing water should be.
+    </p>
+
+    <form id="water-temp-form"
+          hx-post="/calculate/water-temp"
+          hx-target="#water-temp-result"
+          hx-trigger="change, keyup delay:300ms from:input[type=number]"
+          hx-swap="innerHTML"
+          hx-indicator="#water-temp-spinner">
+
+        <input type="hidden" id="temp-unit-hidden" name="temp_unit" value="C">
+
+        <div class="form-row form-row--two">
+            <div class="form-field">
+                <label for="target-dough-temp">Target dough temp</label>
+                <div class="input-with-unit">
+                    <input type="number" id="target-dough-temp" name="target_dough_temp"
+                           value="25" min="15" max="35" step="0.5">
+                    <span class="unit temp-unit-label">°C</span>
+                </div>
+                <small class="field-hint">24-26°C (75-79°F) is the sweet spot for most sourdoughs</small>
+            </div>
+
+            <div class="form-field">
+                <label for="ambient-temp">Room temperature</label>
+                <div class="input-with-unit">
+                    <input type="number" id="ambient-temp" name="ambient_temp"
+                           value="20" min="5" max="40" step="0.5">
+                    <span class="unit temp-unit-label">°C</span>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="flour-temp">Flour temperature</label>
+                <div class="input-with-unit">
+                    <input type="number" id="flour-temp" name="flour_temp"
+                           value="20" min="5" max="35" step="0.5">
+                    <span class="unit temp-unit-label">°C</span>
+                </div>
+                <small class="field-hint">Usually = room temp</small>
+            </div>
+
+            <div class="form-field">
+                <label for="levain-temp">Starter temperature</label>
+                <div class="input-with-unit">
+                    <input type="number" id="levain-temp" name="levain_temp"
+                           value="22" min="5" max="35" step="0.5">
+                    <span class="unit temp-unit-label">°C</span>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="friction-factor">
+                    Friction factor
+                    <button type="button" class="info-trigger" onclick="showTip(this,'friction-factor')">ⓘ</button>
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="friction-factor" name="friction_factor"
+                           value="0" min="0" max="30" step="1">
+                    <span class="unit">°C</span>
+                </div>
+                        <small class="field-hint">0 by hand · 10-30 for a stand mixer. Always in °C, regardless of your temp unit choice above.</small>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="calc-result-wrap">
+        <div id="water-temp-spinner" class="htmx-indicator calc-spinner calc-spinner--overlay">Calculating…</div>
+        <div id="water-temp-result">
+            {% include '_water_temp_result.html' %}
+        </div>
+    </div>
+
+    <!-- Fermentation time sub-section -->
+    <div class="subsection">
+        <h3 class="subsection-title">Bulk Fermentation Adjustment</h3>
+        <p class="section-intro">
+            Fermentation speed roughly doubles every 6-7°C. Enter the temperature your base recipe was designed for, plus your actual room temperature, and get an honest adjusted estimate.
+        </p>
+
+        <form hx-post="/calculate/fermentation"
+              hx-target="#fermentation-result"
+              hx-trigger="change, keyup delay:300ms from:input[type=number]"
+              hx-swap="innerHTML"
+              hx-indicator="#ferm-spinner">
+
+            <input type="hidden" name="temp_unit" id="temp-unit-ferm">
+
+            <div class="form-row form-row--two">
+                <div class="form-field">
+                    <label for="base-fermentation">Base time</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="base-fermentation" name="base_fermentation"
+                               value="5" min="0.5" max="24" step="0.5">
+                        <span class="unit">h</span>
+                    </div>
+                    <small class="field-hint">Recipe's designed bulk time</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="reference-temp">Recipe temp</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="reference-temp" name="reference_temp"
+                               value="21" min="10" max="35" step="0.5">
+                        <span class="unit temp-unit-label">°C</span>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="ambient-temp-ferm">Your room temp</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="ambient-temp-ferm" name="ambient_temp"
+                               value="20" min="5" max="40" step="0.5">
+                        <span class="unit temp-unit-label">°C</span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="calc-result-wrap">
+            <div id="ferm-spinner" class="htmx-indicator calc-spinner calc-spinner--overlay">Calculating…</div>
+            <div id="fermentation-result">
+                {% include '_fermentation_result.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ⑤ BAKE TIMELINE ──────────────────────────────────────────────── -->
+<section class="card section-locked" id="section-timeline">
+    <p class="section-eyebrow">Step 4</p>
+    <h2 class="section-title">Bake Timeline</h2>
+    <p class="section-intro">
+        Tell us when you want fresh bread and we will build your complete schedule, from feeding your starter all the way to the first slice.
+    </p>
+
+    <form hx-post="/calculate/timeline"
+          hx-target="#timeline-result"
+          hx-trigger="submit"
+          hx-swap="innerHTML"
+          hx-include="#bread-type-input, #starter-pct">
+
+        <div class="form-row form-row--three">
+            <div class="form-field">
+                <label for="target-date">Bread ready on</label>
+                <input type="date" id="target-date" name="target_date" required>
+            </div>
+
+            <div class="form-field">
+                <label for="target-time">At</label>
+                <input type="time" id="target-time" name="target_time" value="08:00">
+            </div>
+
+            <div class="form-field">
+                <label for="room-temp">Room temperature</label>
+                <div class="input-with-unit">
+                    <input type="number" id="room-temp" name="room_temp"
+                           value="20" min="10" max="35" step="0.5">
+                    <span class="unit">°C</span>
+                </div>
+                <small class="field-hint">Affects fermentation speed</small>
+            </div>
+        </div>
+
+        <div class="form-row" id="proofing-field">
+            <div class="form-field form-field--wide">
+                <label>Proofing method</label>
+                <div class="radio-group radio-group--horizontal">
+                    <label class="radio-option">
+                        <input type="radio" name="proofing_method" value="cold" checked>
+                        <span>Cold proof overnight
+                            <button type="button" class="info-trigger" onclick="showTip(this,'cold-proof')">ⓘ</button>
+                        </span>
+                        <small>Better flavour, easier scoring. Bake straight from fridge.</small>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="proofing_method" value="room_temp">
+                        <span>Room temp proof</span>
+                        <small>Same-day bake. Roughly 2-4 hours after shaping.</small>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="flatbread-note" class="flatbread-note" style="display:none">
+            <p>Flatbread goes straight from bulk ferment to the pan. No shaping or proofing step needed.</p>
+        </div>
+
+        <div id="proofing-autolyse-fields">
+            <div class="form-row">
+                <div class="form-field form-field--checkbox">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="include_autolyse" id="include-autolyse" checked
+                               onchange="document.getElementById('autolyse-mins-field').style.display = this.checked ? 'block' : 'none'">
+                        Include autolyse rest
+                        <button type="button" class="info-trigger" onclick="showTip(this,'autolyse')">ⓘ</button>
+                    </label>
+                    <small class="field-hint">Mix flour + water first, add starter after a rest. Improves gluten development.</small>
+                </div>
+
+                <div class="form-field" id="autolyse-mins-field">
+                    <label for="autolyse-mins">Autolyse duration</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="autolyse-mins" name="autolyse_mins"
+                               value="30" min="10" max="120" step="5">
+                        <span class="unit">min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large">
+            Generate Bake Plan →
+        </button>
+    </form>
+
+    <div id="timeline-result">
+        {% include '_bake_timeline.html' %}
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block sidebar %}
+{% include '_recipe_summary.html' %}
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    updateHydrationDisplay(document.getElementById('hydration').value);
+
+    // Default date for timeline
+    const dateInput = document.getElementById('target-date');
+    if (dateInput) {
+        const now = new Date();
+        const timeInput = document.getElementById('target-time');
+        const defaultTime = timeInput ? timeInput.value : '08:00';
+        const [h, m] = defaultTime.split(':').map(Number);
+        const todayCutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+        const defaultDate = todayCutoff <= now ? new Date(now.getTime() + 86400000) : now;
+        dateInput.min   = now.toISOString().split('T')[0];
+        dateInput.value = defaultDate.toISOString().split('T')[0];
+    }
+
+    // Restore persisted temperature unit
+    const savedUnit = localStorage.getItem('bb_temp_unit');
+    if (savedUnit === 'F') {
+        setTempUnit('F');
+        document.querySelectorAll('.temp-toggle-pill').forEach(p => {
+            p.classList.toggle('active', p.dataset.unit === 'F');
+        });
+    }
+
+    // Sync fermentation form temp unit
+    const fermUnit = document.getElementById('temp-unit-ferm');
+    if (fermUnit) fermUnit.value = savedUnit || 'C';
+
+    // Populate saved recipes panel
+    populateRecipePanel();
+
+    // Wire up progress stepper
+    initProgressNav();
+
+    // URL share params take priority over saved state
+    const p = new URLSearchParams(location.search);
+    if (p.has('flour') || p.has('hydration') || p.has('starter') || p.has('salt')) {
+        const flourInp = document.getElementById('flour-weight');
+        const hydInp   = document.getElementById('hydration');
+        const startInp = document.getElementById('starter-pct-visible');
+        const startHid = document.getElementById('starter-pct');
+        const saltInp  = document.getElementById('salt-pct-visible');
+        const saltHid  = document.getElementById('salt-pct');
+        const typeInp  = document.getElementById('bread-type-input');
+        if (p.has('flour') && flourInp) flourInp.value = p.get('flour');
+        if (p.has('hydration') && hydInp) { hydInp.value = p.get('hydration'); updateHydrationDisplay(hydInp.value); }
+        if (p.has('starter') && startInp) { startInp.value = p.get('starter'); if (startHid) startHid.value = p.get('starter'); }
+        if (p.has('salt') && saltInp) { saltInp.value = p.get('salt'); if (saltHid) saltHid.value = p.get('salt'); }
+        if (p.has('type') && typeInp) {
+            typeInp.value = p.get('type');
+            const radio = document.querySelector(`[name="bread_type_radio"][value="${p.get('type')}"]`);
+            if (radio) radio.checked = true;
+        }
+        const form = document.getElementById('recipe-form');
+        if (form && window.htmx) htmx.trigger(form, 'change');
+        history.replaceState(null, '', location.pathname);
+    } else {
+        // Restore last saved recipe state from localStorage
+        const lastState = localStorage.getItem('bb_last_state');
+        if (lastState) {
+            try { restoreFormState(JSON.parse(lastState)); } catch (e) {}
+        }
+        // Restore last generated timeline
+        const lastTimeline = localStorage.getItem('bb_last_timeline');
+        if (lastTimeline) {
+            const tlEl = document.getElementById('timeline-result');
+            if (tlEl) {
+                tlEl.innerHTML = lastTimeline;
+                initTimelineChecks();
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

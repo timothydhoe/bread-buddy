@@ -1,0 +1,128 @@
+{% if error %}
+<div class="result result--error">{{ error }}</div>
+
+{% elif steps %}
+
+{% if steps[0].time < now %}
+<div class="timeline-warning">
+    Some steps fall in the past. Set a later target time to get a plan you can actually follow.
+</div>
+{% endif %}
+
+<div class="timeline-actions">
+    <button class="btn btn-outline btn-small" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn btn-outline btn-small" id="reminders-btn" onclick="toggleReminders()">
+        Set step reminders
+    </button>
+</div>
+<div id="reminders-status" class="reminders-status" hidden></div>
+
+<div class="timeline" id="bake-timeline">
+    {% set ns = namespace(current_day='') %}
+    {% for step in steps %}
+        {% set day = step.day_str %}
+        {% if day != ns.current_day %}
+            {% set ns.current_day = day %}
+            <div class="timeline-day">{{ day }}</div>
+        {% endif %}
+
+        <div class="timeline-step {% if step.milestone %}timeline-step--milestone{% endif %}"
+             data-step-idx="{{ loop.index0 }}"
+             data-step-time="{{ step.time.strftime('%H:%M') }}"
+             data-step-date="{{ step.time.strftime('%Y-%m-%d') }}"
+             data-step-label="{{ step.label | e }}"
+             data-step-cue="{{ step.cue | default('') | e }}">
+            <div class="step-time">{{ step.hour_str }}</div>
+            <div class="step-connector">
+                <div class="step-dot {% if step.milestone %}step-dot--milestone{% endif %}"></div>
+                <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+                <label class="step-check-label">
+                    <input type="checkbox" class="step-check" data-step-idx="{{ loop.index0 }}">
+                    <span class="step-label">{{ step.label }}</span>
+                </label>
+                <div class="step-desc">{{ step.description }}</div>
+                {% if step.cue %}
+                <details class="step-cue">
+                    <summary>What to look for</summary>
+                    <p>{{ step.cue }}</p>
+                </details>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+<div class="equipment-section">
+    <h3 class="equipment-title">Equipment checklist</h3>
+    <ul class="equipment-list">
+        {% if bread_type == 'freestanding' %}
+        <li class="equipment-item">Dutch oven (4-6 qt) or combo cooker</li>
+        <li class="equipment-item">Banneton (proofing basket) or a bowl lined with a well-floured cloth</li>
+        <li class="equipment-item">Bench scraper</li>
+        <li class="equipment-item">Lame or sharp razor blade for scoring</li>
+        <li class="equipment-item">Large mixing bowl</li>
+        <li class="equipment-item">Kitchen scale (1g precision)</li>
+        <li class="equipment-item">Instant-read thermometer</li>
+        {% elif bread_type == 'loaf_pan' %}
+        <li class="equipment-item">9x5 inch loaf pan, lightly greased</li>
+        <li class="equipment-item">No Dutch oven needed: the pan takes care of steam</li>
+        <li class="equipment-item">Bench scraper</li>
+        <li class="equipment-item">Large mixing bowl</li>
+        <li class="equipment-item">Kitchen scale (1g precision)</li>
+        <li class="equipment-item">Instant-read thermometer</li>
+        <li class="equipment-item">Lame or sharp knife for scoring (optional but satisfying)</li>
+        {% elif bread_type == 'flatbread' %}
+        <li class="equipment-item">Cast iron skillet or flat griddle</li>
+        <li class="equipment-item">Rolling pin</li>
+        <li class="equipment-item">Large mixing bowl</li>
+        <li class="equipment-item">Kitchen scale (1g precision)</li>
+        <li class="equipment-item">Bench scraper or bowl scraper</li>
+        {% else %}
+        <li class="equipment-item">Large jar (500ml or more) with a loose lid</li>
+        <li class="equipment-item">Kitchen scale (1g precision)</li>
+        <li class="equipment-item">Rubber band or tape to mark the rise level</li>
+        {% endif %}
+    </ul>
+</div>
+
+<details class="bake-log-panel">
+    <summary>Record this bake</summary>
+    <div class="bake-log-form">
+        <p class="bake-log-intro">How did it go? Tap one. That's it.</p>
+
+        <div class="bake-quick-outcomes">
+            <button type="button" class="bake-quick-btn" data-outcome="great"
+                    onclick="selectOutcome(this)">Great</button>
+            <button type="button" class="bake-quick-btn" data-outcome="good"
+                    onclick="selectOutcome(this)">Good</button>
+            <button type="button" class="bake-quick-btn bake-quick-btn--selected" data-outcome="ok"
+                    onclick="selectOutcome(this)">OK</button>
+            <button type="button" class="bake-quick-btn" data-outcome="disappointing"
+                    onclick="selectOutcome(this)">Disappointing</button>
+        </div>
+
+        <div class="bake-quick-crumb">
+            <span class="bake-log-label">Crumb</span>
+            <div class="bake-crumb-pills">
+                <button type="button" class="crumb-pill" data-crumb="dense" onclick="selectCrumb(this)">Dense</button>
+                <button type="button" class="crumb-pill crumb-pill--selected" data-crumb="standard" onclick="selectCrumb(this)">Standard</button>
+                <button type="button" class="crumb-pill" data-crumb="open" onclick="selectCrumb(this)">Open</button>
+                <button type="button" class="crumb-pill" data-crumb="gummy" onclick="selectCrumb(this)">Gummy</button>
+            </div>
+        </div>
+
+        <textarea id="bl-notes" class="bake-log-notes"
+                  placeholder="Notes (optional) — what to change next time?" maxlength="200" rows="2"></textarea>
+
+        <button type="button" class="btn btn-primary" onclick="saveBakeLog()">Save bake →</button>
+    </div>
+</details>
+
+{% else %}
+<div class="timeline-empty">
+    <p>Set a target date and time above, then click <strong>Generate Bake Plan</strong>.</p>
+</div>
+{% endif %}

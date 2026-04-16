@@ -1,0 +1,22 @@
+{% if error %}
+<div class="result result--error">{{ error }}</div>
+
+{% elif result %}
+<div class="result result--success">
+    <div class="result-main">
+        Use <strong>{{ result.water_temp }}{{ result.unit }}</strong> water
+    </div>
+    {% if result.water_temp_c < 5 %}
+    <p class="result-note">Very cold: consider using ice water or pre-chilling your mixing bowl.</p>
+    {% elif result.water_temp_c > 40 %}
+    <p class="result-note">This is too hot for your starter. Lower your room temperature, use cooler flour, or pre-chill your bowl.</p>
+    {% else %}
+    <p class="result-note">
+        {% if result.water_temp_c < 15 %}Cold tap water should do it.
+        {% elif result.water_temp_c < 25 %}Room-temperature water will be about right.
+        {% else %}Slightly warm water: check it with a thermometer rather than guessing.
+        {% endif %}
+    </p>
+    {% endif %}
+</div>
+{% endif %}

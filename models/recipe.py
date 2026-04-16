@@ -31,8 +31,9 @@ class Recipe:
         return self._name
 
     @name.setter
-    def name(self):
-        pass
+    def name(self, value):
+        if value and isinstance(value, str):
+            self._name = value
 
     def __str__(self):
         return f"Recipe: {self.name}\n  {self.ingredients}"
@@ -86,18 +87,6 @@ class Recipe:
         if flour == 0:
             return 0
         return round((self.total_liquid_weight / flour) * 100, 1)
-
-    def divide_water():
-        # Idea to divide water, never pour total water at once,
-        # keep about 10% on the side to add after if needed.
-        pass
-
-    def validate(self):
-        """ Check dough viability.
-
-        At least one flour. All ingredients have weights. warning if hydration is too low. Suggest if ingredient forgotten. eg. yeast
-        """
-        pass
 
     def scale(self, factor: float):
         """ Return a new scaled recipe"""
@@ -162,28 +151,94 @@ class Recipe:
         recipe.ingredients = [Ingredient.from_dict(ingredient) for ingredient in data["ingredients"]]
         return recipe
 
+    @property
+    def chart_data(self) -> list:
+        """Return ingredient data list for donut chart rendering."""
+        return [ing.to_chart_dict() for ing in self.ingredients]
 
-# rye = Ingredient('rye', 500, 'flour')
-# water = Ingredient('WAter', 300, 'water')
-# salt = Ingredient('salt', 10, 'salt')
-# # starter = Levain()
+    def hints(self, bread_type: str = 'freestanding') -> list:
+        """Return a list of smart hint dicts for the current recipe.
 
-# the_one = Recipe("My First Loaf")
-# print(the_one)
+        Each dict has keys: 'level' ('warn' or 'info'), 'text' (str).
+        """
+        result = []
+        flour = self.total_flour_weight
+        if flour == 0:
+            return result
 
-# the_one.add_ingredient(rye)
-# the_one.add_ingredient(water)
-# the_one.add_ingredient(salt)
+        hyd = self.hydration_percentage
+        starter_w = sum(i.weight for i in self.ingredients if i.category == 'starter')
+        salt_w    = sum(i.weight for i in self.ingredients if i.category == 'salt')
+        starter_pct = (starter_w / flour) * 100 if flour else 0
+        salt_pct    = (salt_w    / flour) * 100 if flour else 0
 
-# print(the_one)
+        flour_ings = [i for i in self.ingredients if i.category == 'flour']
+        rye_w = sum(i.weight for i in flour_ings if 'rye' in i.name.lower())
+        rye_pct = (rye_w / flour) * 100 if flour else 0
 
-# recipe = Recipe.from_bakers_percentage(
-#     "My Sourdough",
-#     1000,
-#     {"water": 0.70, "salt": 0.02, "starter": 0.20}
-# )
+        if hyd >= 90:
+            result.append({
+                'level': 'warn',
+                'text': f"Put your wetsuit on. At {hyd:.0f}% this is not a dough, it is a very committed puddle. You will need the strongest high-protein flour you can find, a bench scraper for every single move, and absolutely no shame about relying on a well-oiled banneton liner. Achievable, but do not say you were not warned.",
+            })
+        elif hyd > 78 and bread_type == 'freestanding':
+            result.append({
+                'level': 'warn',
+                'text': f'At {hyd}%, this is a wet dough for a free-form loaf. Shaping will require confident hands and a well-floured bench. 70-76% is more forgiving if you are still building technique.',
+            })
+        if salt_pct < 1.5 and salt_w > 0:
+            result.append({
+                'level': 'warn',
+                'text': f'Salt is low at {salt_pct:.1f}%. It does considerably more than season: it tightens gluten, slows fermentation, and suppresses unwanted bacteria. Aim for 1.8-2.2%.',
+            })
+        if salt_pct > 2.8:
+            result.append({
+                'level': 'info',
+                'text': f'Salt is at {salt_pct:.1f}%, which is on the assertive side. Most recipes sit comfortably at 2-2.2%. Perfectly fine if you like your bread well-seasoned, but fermentation may drag slightly.',
+            })
+        if starter_pct > 20:
+            result.append({
+                'level': 'info',
+                'text': f'You are using a generous {starter_pct:.0f}% starter. Expect a fast rise and a mild, approachable flavour. Drop to 8-12% and give it more time if you want more sour character.',
+            })
+        if starter_pct < 5 and starter_w > 0:
+            result.append({
+                'level': 'info',
+                'text': f'At only {starter_pct:.1f}% starter, fermentation will be slow and deliberate. Budget 12-18 hours for bulk at room temperature. The trade-off is a more complex, tangy flavour.',
+            })
+        if rye_pct > 50:
+            result.append({
+                'level': 'info',
+                'text': 'More than half rye: expect a denser, moister crumb and noticeably faster fermentation. Rye enzymes are extremely active. Watch your bulk carefully.',
+            })
 
-# print(recipe)
-# print(f"Total weight: {recipe.total_weight}g")
-# print(f"Hydration: {recipe.hydration_percentage}%")
+        # Whole wheat / wholemeal
+        ww_w = sum(i.weight for i in flour_ings
+                   if any(w in i.name.lower() for w in ('whole wheat', 'wholemeal', 'whole grain')))
+        ww_pct = (ww_w / flour) * 100 if flour else 0
+        if ww_pct > 0:
+            result.append({
+                'level': 'info',
+                'text': f'Whole wheat at {ww_pct:.0f}%: it absorbs considerably more water than white flour, so your dough may feel stiffer than you expect. Add a small splash more water if needed. Expect a nuttier depth of flavour and slightly faster fermentation.',
+            })
+
+        # Spelt
+        spelt_w = sum(i.weight for i in flour_ings if 'spelt' in i.name.lower())
+        spelt_pct = (spelt_w / flour) * 100 if flour else 0
+        if spelt_pct > 20:
+            result.append({
+                'level': 'warn',
+                'text': f'Spelt at {spelt_pct:.0f}%: wonderful flavour, genuinely fragile gluten. Keep your autolyse short, handle it gently during shaping, and resist any urge to overwork it. You will not enjoy the consequences if you do.',
+            })
+
+        # Einkorn
+        einkorn_w = sum(i.weight for i in flour_ings if 'einkorn' in i.name.lower())
+        einkorn_pct = (einkorn_w / flour) * 100 if flour else 0
+        if einkorn_pct > 0:
+            result.append({
+                'level': 'info',
+                'text': f'Einkorn at {einkorn_pct:.0f}%: an ancient grain with very weak gluten by modern standards. Expect a denser crumb, faster fermentation, and a distinctly nutty, almost sweet flavour. Worth every bit of the extra care it demands.',
+            })
+
+        return result
 

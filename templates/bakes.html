@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="science-layout">
+<article class="science-article">
+
+    <header class="science-hero">
+        <p class="section-eyebrow">Bake Log</p>
+        <h1 class="science-title">Your baking history</h1>
+        <p class="science-lead">
+            Every bake is data. Record what actually happened: the triumphant, the gummy, and the quietly embarrassing.
+            You will improve faster from one honest log than from any amount of reading about it.
+        </p>
+    </header>
+
+    <div id="bake-log-list">
+        <!-- populated by JS from localStorage on DOMContentLoaded -->
+        <p class="bake-log-empty" id="bake-log-empty" style="display:none">
+            No bakes recorded yet. Generate a bake plan, then use the "Record this bake" panel at the bottom to log your results.
+        </p>
+    </div>
+
+</article>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    renderBakeLog();
+});
+</script>
+{% endblock %}

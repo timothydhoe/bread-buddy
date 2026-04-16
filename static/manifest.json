@@ -1,0 +1,27 @@
+{
+  "name": "bread buddy",
+  "short_name": "bread buddy",
+  "description": "Sourdough calculator and bake planner",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#b5673c",
+  "background_color": "#f6f2ec",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "lifestyle", "utilities"],
+  "lang": "en"
+}

@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="science-layout">
+
+<article class="science-article">
+
+    <header class="science-hero">
+        <p class="section-eyebrow">The Science</p>
+        <h1 class="science-title">Why sourdough works</h1>
+        <p class="science-lead">
+            Sourdough is not magic. It is a small, teeming city of microorganisms working in
+            surprisingly well-organised chaos. Understanding the biology will not just make you
+            a better baker; it will make every loaf feel like a minor miracle you actually
+            understand.
+        </p>
+        <p class="science-attribution">
+            Content based on <em>The Sourdough Framework</em> by Hendrik Kleinwächter (CC BY-SA 4.0).
+        </p>
+    </header>
+
+    <nav class="science-toc">
+        <p class="toc-label">On this page</p>
+        <ol class="toc-list">
+            <li><a href="#enzymes">Enzymes</a></li>
+            <li><a href="#yeast">Yeast</a></li>
+            <li><a href="#bacteria">Bacteria</a></li>
+            <li><a href="#acids">Lactic vs. acetic acid</a></li>
+            <li><a href="#temperature">Temperature and fermentation</a></li>
+            <li><a href="#bakers-math">Baker's maths</a></li>
+            <li><a href="#history">A short history</a></li>
+        </ol>
+    </nav>
+
+    <!-- ── Enzymes ─────────────────────────────────────────────── -->
+    <section class="science-section" id="enzymes">
+        <h2>Enzymes: the invisible prep cooks</h2>
+        <p>
+            Long before your yeast and bacteria even notice there is work to be done, two
+            enzymes have already rolled up their sleeves. They activate the moment flour
+            meets water, asking for no instructions and requiring no supervision.
+        </p>
+
+        <div class="science-card-row">
+            <div class="science-card">
+                <h3>Amylase</h3>
+                <p>
+                    Amylase chops starches into simpler sugars, mainly maltose. This matters
+                    for two reasons: yeast eat those sugars to produce CO2 (your lift), and
+                    during baking those same sugars drive the <strong>Maillard reaction</strong>,
+                    which is responsible for your crust's deep amber colour and the complex
+                    toasty flavour that makes the kitchen smell incredible.
+                </p>
+                <p class="science-note">
+                    Wholegrain and rye flours have high amylase activity. Too much and the
+                    starch structure weakens, giving you a gummy crumb. This is largely why
+                    rye behaves so differently from white wheat flour.
+                </p>
+            </div>
+            <div class="science-card">
+                <h3>Protease</h3>
+                <p>
+                    Protease snips the protein chains (glutenin and gliadin) that form gluten.
+                    A modest amount of this makes dough wonderfully <strong>extensible</strong>,
+                    meaning you can stretch it without it snapping back at you. Autolyse
+                    (resting flour and water before adding starter) exists specifically to give
+                    protease this quiet window.
+                </p>
+                <p class="science-note">
+                    Leave the dough too long in a warm place and protease goes too far,
+                    degrading gluten completely. The dough becomes a puddle. Ferment with
+                    intention, not ambition.
+                </p>
+            </div>
+        </div>
+
+        <div class="science-callout">
+            <strong>Autolyse, demystified:</strong> Mix flour and water, wait 20-60 minutes,
+            then add starter and salt. In that window, amylase builds sugar reserves and
+            protease softens the gluten network. The result is a noticeably silkier dough
+            that requires far less muscle to develop. It is not a trend; it is chemistry.
+        </div>
+    </section>
+
+    <!-- ── Yeast ───────────────────────────────────────────────── -->
+    <section class="science-section" id="yeast">
+        <h2>Yeast: the leavening engine</h2>
+        <p>
+            Yeast are <strong>saprotrophic fungi</strong>, meaning they earn a living by
+            breaking down organic matter. In your dough, that means sugars. The dominant
+            species in most starters is <em>Saccharomyces cerevisiae</em>, which is
+            also responsible for beer, wine, and commercial bread yeast. Wild starters
+            often host <em>Kazachstania humilis</em> alongside it, which is more
+            acid-tolerant and partly explains why sourdough starters survive conditions
+            that would kill commercial yeast outright.
+        </p>
+
+        <h3>Two modes, one organism</h3>
+        <p>
+            Yeast switch their metabolism depending on how much oxygen is available:
+        </p>
+        <ul class="science-list">
+            <li>
+                <strong>With oxygen (aerobic):</strong> yeast reproduce quickly, consuming
+                sugar to produce CO2 and water. Minimal alcohol. This phase dominates early
+                in the mix, while the dough still has trapped air.
+            </li>
+            <li>
+                <strong>Without oxygen (anaerobic):</strong> as the dough tightens and air is
+                expelled, yeast switch to fermentation. Now they produce CO2 <em>and</em>
+                ethanol. The CO2 inflates your gluten bubbles. The ethanol evaporates during
+                baking and contributes to crust flavour.
+            </li>
+        </ul>
+
+        <h3>Temperature sensitivity</h3>
+        <p>
+            Yeast activity roughly <strong>doubles for every 6-7°C increase</strong> between
+            4°C and 38°C. Below 4°C, they are functionally asleep. Above 38°C, they start
+            dying. This is why cold-proofing slows everything down, and why a warm kitchen
+            can turn a 6-hour bulk into a 3-hour panic.
+        </p>
+
+        <div class="science-callout">
+            <strong>Why cold proofing works:</strong> At 4-8°C, yeast activity drops to almost
+            nothing. Bacteria, however, keep quietly working. The extended, cold fermentation
+            shifts flavour production towards acetic acid (more tang), and the cold dough holds
+            its shape brilliantly under the score. Bake straight from cold. Warming it up first
+            is a common and avoidable mistake.
+        </div>
+    </section>
+
+    <!-- ── Bacteria ────────────────────────────────────────────── -->
+    <section class="science-section" id="bacteria">
+        <h2>Bacteria: the flavour makers</h2>
+        <p>
+            Here is the fact that surprises almost everyone: a healthy sourdough starter
+            contains roughly <strong>100 bacteria for every single yeast cell</strong>.
+            The bacteria are running this show. Yeast provide the lift, but bacteria provide
+            the character.
+        </p>
+        <p>
+            The dominant bacteria are lactic acid bacteria (LAB) of the
+            <em>Lactobacillus</em> genus. They are the same group responsible for yoghurt,
+            kimchi, and cheese. They thrive in acidic, low-oxygen environments, tolerate
+            salt, and are not easily crowded out by competitors. They have been doing this
+            for millennia and they are very good at it.
+        </p>
+
+        <div class="science-card-row">
+            <div class="science-card">
+                <h3>Homofermentative LAB</h3>
+                <p>
+                    These produce <strong>only lactic acid</strong> from glucose. Efficient
+                    and clean. They dominate at warmer temperatures (28-35°C) and higher
+                    hydrations.
+                </p>
+                <p class="science-note">
+                    Result: a mild, rounded sourness with creamy, yoghurt-like notes. Pleasant
+                    and accessible. Good for feeding people who claim they do not like sour bread.
+                </p>
+            </div>
+            <div class="science-card">
+                <h3>Heterofermentative LAB</h3>
+                <p>
+                    These produce lactic acid <em>plus</em> <strong>acetic acid and CO2</strong>.
+                    More complex metabolically. They dominate at cooler temperatures (18-24°C)
+                    and lower hydrations.
+                </p>
+                <p class="science-note">
+                    Result: a sharper, more assertive tang with vinegary top notes. The flavour
+                    profile most people picture when they say "proper sourdough".
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Acids ───────────────────────────────────────────────── -->
+    <section class="science-section" id="acids">
+        <h2>Lactic vs. acetic acid</h2>
+        <p>
+            Both acids keep the bread from going off quickly, and both contribute to
+            flavour. But they taste completely different and respond to completely different
+            conditions. As a baker, this is one of the most useful levers you have.
+        </p>
+
+        <table class="science-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Lactic acid</th>
+                    <th>Acetic acid</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Flavour</td>
+                    <td>Mild, creamy, yoghurt-y</td>
+                    <td>Sharp, tangy, vinegar-forward</td>
+                </tr>
+                <tr>
+                    <td>Favoured by</td>
+                    <td>Warm temps, high hydration, shorter bulk</td>
+                    <td>Cool temps, lower hydration, long or cold bulk</td>
+                </tr>
+                <tr>
+                    <td>Crumb character</td>
+                    <td>More open, lighter crust colour</td>
+                    <td>Denser, deeper, more chewy crust</td>
+                </tr>
+                <tr>
+                    <td>Classic example</td>
+                    <td>French pain au levain</td>
+                    <td>San Francisco sourdough</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="science-callout">
+            <strong>The baker's lever:</strong> You control the balance through temperature and
+            timing. A warm bulk at 26°C followed by a short cold proof produces a lactic,
+            approachable loaf. A cooler bulk at 19-21°C followed by a long overnight retard
+            pushes you firmly into acetic territory. Neither is better. They are different
+            breads.
+        </div>
+    </section>
+
+    <!-- ── Temperature ─────────────────────────────────────────── -->
+    <section class="science-section" id="temperature">
+        <h2>Temperature and fermentation speed</h2>
+        <p>
+            Temperature is the single most powerful variable available to a home baker, and
+            also the most commonly ignored. The <strong>Q10 rule</strong> describes how
+            biological reaction rates change with temperature: broadly, fermentation roughly
+            doubles for every 10°C increase, or halves for every 10°C drop. For sourdough,
+            the practical doubling point is around 6-7°C.
+        </p>
+        <p>
+            This chart shows how a 5-hour bulk (at a reference of 21°C) stretches or
+            compresses depending on your room temperature. The highlighted bar is your
+            reference.
+        </p>
+
+        <div class="science-temp-chart">
+            <div class="temp-chart-inner">
+                {% set temps = [15, 17, 19, 21, 23, 25, 27, 29, 31] %}
+                {% set base_h = 5 %}
+                {% set ref_t = 21 %}
+                {% for t in temps %}
+                {% set adj = (base_h * (1.12 ** (ref_t - t))) | round(1) %}
+                {% set bar_raw = (adj / 20 * 100) | round(1) %}
+                {% set bar_pct = bar_raw if bar_raw < 100 else 100 %}
+                <div class="temp-bar-row">
+                    <span class="temp-bar-label">{{ t }}°C</span>
+                    <div class="temp-bar-track">
+                        <div class="temp-bar-fill {% if t == ref_t %}temp-bar-fill--ref{% endif %}"
+                             style="width: {{ bar_pct }}%"></div>
+                    </div>
+                    <span class="temp-bar-val">~{{ adj }}h</span>
+                </div>
+                {% endfor %}
+            </div>
+            <p class="science-note" style="margin-top:8px">
+                Approximate bulk time from a 5-hour base recipe at 21°C reference. Use
+                Bread Buddy's Bulk Fermentation calculator for precise values.
+            </p>
+        </div>
+
+        <h3>Desired Dough Temperature (DDT)</h3>
+        <p>
+            Professional bakers do not guess the water temperature. They calculate it. The
+            DDT formula ensures every mix lands at the same starting temperature regardless
+            of ambient conditions:
+        </p>
+        <div class="science-formula">
+            Water temp = (DDT x 4) - flour temp - room temp - levain temp - friction factor
+        </div>
+        <p>
+            The multiplier of 4 accounts for the four temperature inputs: room, flour, levain,
+            and water. Friction factor is the heat added by mechanical mixing: roughly 0 by hand,
+            10-25°C for a stand mixer on medium. A bit of maths before mixing saves you a lot
+            of guesswork during bulk.
+        </p>
+    </section>
+
+    <!-- ── Baker's maths ────────────────────────────────────────── -->
+    <section class="science-section" id="bakers-math">
+        <h2>Baker's maths</h2>
+        <p>
+            Baker's percentage expresses every ingredient as a proportion of total flour
+            weight. Flour is always 100%, regardless of actual grams. This means you can
+            compare recipes of different sizes directly, scale any recipe without a calculator,
+            and immediately understand a recipe's character just by glancing at the numbers.
+        </p>
+
+        <table class="science-table">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Baker's %</th>
+                    <th>At 500g flour</th>
+                    <th>At 1000g flour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Flour</td>
+                    <td>100%</td>
+                    <td>500g</td>
+                    <td>1000g</td>
+                </tr>
+                <tr>
+                    <td>Water</td>
+                    <td>72%</td>
+                    <td>360g</td>
+                    <td>720g</td>
+                </tr>
+                <tr>
+                    <td>Starter</td>
+                    <td>10%</td>
+                    <td>50g</td>
+                    <td>100g</td>
+                </tr>
+                <tr>
+                    <td>Salt</td>
+                    <td>2%</td>
+                    <td>10g</td>
+                    <td>20g</td>
+                </tr>
+                <tr class="science-table-total">
+                    <td>Total dough</td>
+                    <td>184%</td>
+                    <td>920g</td>
+                    <td>1840g</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Accounting for starter hydration</h3>
+        <p>
+            A starter is itself a mixture of flour and water. To calculate your actual
+            dough hydration correctly, you need to split the starter into its component
+            parts. The formula:
+        </p>
+        <div class="science-formula">
+            Water from starter = starter weight x (hydration / (1 + hydration))
+        </div>
+        <p>
+            For a 100% hydration starter (equal parts flour and water by weight): 50g of
+            starter contributes 25g of flour and 25g of water. Bread Buddy uses this formula
+            internally so the hydration percentage it shows you is always honest.
+        </p>
+
+        <h3>What salt actually does</h3>
+        <p>
+            Salt is not just seasoning. It tightens the gluten network (making the dough
+            stronger and better at holding gas), slows fermentation (giving you more control
+            over your schedule), and suppresses wild bacteria that would otherwise compete
+            with your LAB. The sweet spot is <strong>1.8-2.2%</strong>. Below 1.5% and your
+            bread will taste flat and ferment unpredictably. Above 2.5% and the dough is
+            noticeably salty and fermentation drags.
+        </p>
+    </section>
+
+    <!-- ── History ─────────────────────────────────────────────── -->
+    <section class="science-section" id="history">
+        <h2>A short history</h2>
+        <p>
+            Sourdough is the oldest form of leavened bread by a considerable margin.
+            Archaeological evidence points to fermented grain breads in ancient Egypt around
+            3000 BCE, almost certainly discovered when some dough was left sitting in warm
+            conditions long enough for wild yeasts to take hold. As origin stories go, it is
+            a good one.
+        </p>
+        <p>
+            For most of recorded history, the starter was the only leavening available.
+            Bakers maintained their cultures across decades and generations, and a working
+            starter was a genuinely valuable thing to own. The Industrial Revolution changed
+            everything: commercial yeast (reliably isolated <em>Saccharomyces cerevisiae</em>)
+            became commercially available in the mid-1800s, offering fast, predictable results
+            without the fuss of maintaining a live culture. By the mid-20th century, industrial
+            bread had almost completely replaced it.
+        </p>
+        <p>
+            The revival began quietly in the 1970s and gathered serious momentum in the 2010s,
+            driven by a growing interest in fermentation, flavour complexity, and food that
+            lasts longer without a list of preservatives on the label. The COVID-19 lockdowns
+            of 2020 produced a global sourdough moment. The flour shortage that followed
+            confirmed that a great many people were taking it seriously.
+        </p>
+        <p>
+            Today the science is well-documented, the community is enormous, and the tools
+            are better than they have ever been. You are holding one of them.
+        </p>
+    </section>
+
+</article>
+</div>
+{% endblock %}

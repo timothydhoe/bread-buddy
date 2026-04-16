@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bread buddy — offline</title>
+    <style>
+        :root {
+            --bg: #f6f2ec;
+            --surface: #fffefb;
+            --clay: #b5673c;
+            --clay-dark: #7a3b1e;
+            --text: #1c1009;
+            --text-muted: #9a7d6c;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "DM Sans", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100svh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06), 0 10px 36px rgba(0,0,0,0.08);
+        }
+        .icon { font-size: 3rem; margin-bottom: 20px; }
+        h1 {
+            font-family: "Newsreader", Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--clay-dark);
+            margin-bottom: 12px;
+        }
+        p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .tip {
+            margin-top: 24px;
+            padding: 14px 16px;
+            background: #fdf8f4;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: left;
+        }
+        .tip strong { color: var(--clay-dark); display: block; margin-bottom: 4px; }
+        a {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 10px 24px;
+            background: var(--clay);
+            color: #fff;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">🍞</div>
+        <h1>You're offline</h1>
+        <p>bread buddy needs a connection for calculations. Your saved recipes and bake log are still here.</p>
+        <div class="tip">
+            <strong>While you wait</strong>
+            Check your dough — it's probably doing something interesting right now.
+        </div>
+        <a href="/">Try again</a>
+    </div>
+</body>
+</html>
